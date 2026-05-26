@@ -38,17 +38,6 @@ type ClarityReport = {
   disclaimer: string;
 };
 
-const emptyReport: ClarityReport = {
-  title: "",
-  core: "",
-  resonance: [],
-  energy: [],
-  risks: [],
-  questions: [],
-  firstStep: "",
-  disclaimer: "",
-};
-
 function generateDemoReport(form: typeof defaultForm): ClarityReport {
   const name = form.name || "Друже";
 
@@ -85,24 +74,60 @@ function generateDemoReport(form: typeof defaultForm): ClarityReport {
 }
 
 async function requestClarityReport(form: typeof defaultForm): Promise<ClarityReport> {
+  const fallback = generateDemoReport(form);
+
   try {
     const response = await fetch("/api/clarity-report", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: form.name,
+        birthDate: form.birthDate,
+        birthPlace: form.birthPlace,
+        age: form.birthDate,
+        focus: form.answers[0],
+        drain: form.answers[1],
+        answers: form.answers,
+      }),
     });
 
-    if (!response.ok) throw new Error("Backend is not ready yet");
-
     const data = await response.json();
-    return { ...emptyReport, ...data };
+
+    if (!response.ok || data.error) {
+      return {
+        ...fallback,
+        core:
+          data.error ||
+          "AI-звіт зараз не згенерувався. Найімовірніше, API потребує кредитів або налаштування. Нижче показано demo-режим LES AION.",
+      };
+    }
+
+    if (data.result) {
+      return {
+        ...fallback,
+        core: data.result,
+      };
+    }
+
+    return {
+      ...fallback,
+      ...data,
+    };
   } catch {
-    return generateDemoReport(form);
+    return {
+      ...fallback,
+      core:
+        "AI-звіт зараз не згенерувався через технічну помилку. Нижче показано demo-режим LES AION.",
+    };
   }
 }
 
 export default function Home() {
-  const [step, setStep] = useState<"landing" | "intake" | "processing" | "report">("landing");
+  const [step, setStep] = useState<"landing" | "intake" | "processing" | "report">(
+    "landing"
+  );
   const [form, setForm] = useState(defaultForm);
   const [report, setReport] = useState<ClarityReport | null>(null);
 
@@ -114,7 +139,9 @@ export default function Home() {
 
   const startProcessing = async () => {
     setStep("processing");
+
     const generatedReport = await requestClarityReport(form);
+
     setReport(generatedReport);
     setStep("report");
   };
@@ -130,14 +157,18 @@ export default function Home() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(250,204,21,0.18),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(59,130,246,0.18),_transparent_35%)]" />
 
       <div className="relative mx-auto max-w-6xl px-5 py-8">
-        <header className="flex items-center justify-between">
+        <header className="no-print flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-300/15 ring-1 ring-amber-200/30">
               <Sparkles className="h-5 w-5 text-amber-200" />
             </div>
             <div>
-              <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">LES AION</p>
-              <p className="text-xs text-slate-400">V0 · Operating System of Clarity</p>
+              <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">
+                LES AION
+              </p>
+              <p className="text-xs text-slate-400">
+                V0 · Operating System of Clarity
+              </p>
             </div>
           </div>
 
@@ -162,13 +193,16 @@ export default function Home() {
               </h1>
 
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                LES AION V0 збирає базові дані та відповіді в один мʼякий AI-звіт:
-                діапазон можливих патернів, джерела енергії, ризики розфокусу і перший
-                крок на 24 години.
+                LES AION V0 збирає базові дані та відповіді в один мʼякий
+                AI-звіт: діапазон можливих патернів, джерела енергії, ризики
+                розфокусу і перший крок на 24 години.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button onClick={() => setStep("intake")} className="rounded-2xl px-6 py-6 text-base">
+                <Button
+                  onClick={() => setStep("intake")}
+                  className="rounded-2xl px-6 py-6 text-base"
+                >
                   Створити Карту Ясності <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -182,12 +216,20 @@ export default function Home() {
               <Card className="rounded-[2rem] border-white/10 bg-white/8 shadow-2xl backdrop-blur">
                 <CardContent className="p-7">
                   <div className="rounded-[1.5rem] border border-amber-200/15 bg-slate-900/70 p-6">
-                    <p className="text-sm uppercase tracking-[0.3em] text-amber-100/60">Preview</p>
-                    <h2 className="mt-4 text-2xl font-semibold text-slate-50">Карта Ясності</h2>
+                    <p className="text-sm uppercase tracking-[0.3em] text-amber-100/60">
+                      Preview
+                    </p>
+                    <h2 className="mt-4 text-2xl font-semibold text-slate-50">
+                      Карта Ясності
+                    </h2>
                     <div className="mt-6 space-y-4 text-sm text-slate-300">
-                      <div className="rounded-2xl bg-white/5 p-4">Ядро резонансу</div>
+                      <div className="rounded-2xl bg-white/5 p-4">
+                        Ядро резонансу
+                      </div>
                       <div className="rounded-2xl bg-white/5 p-4">Що живить</div>
-                      <div className="rounded-2xl bg-white/5 p-4">Ризики розфокусу</div>
+                      <div className="rounded-2xl bg-white/5 p-4">
+                        Ризики розфокусу
+                      </div>
                       <div className="rounded-2xl bg-amber-200/10 p-4 text-amber-100">
                         Перший крок на 24 години
                       </div>
@@ -205,8 +247,8 @@ export default function Home() {
               <CardContent className="p-7 md:p-10">
                 <h1 className="text-3xl font-semibold">Вхід у LES AION V0</h1>
                 <p className="mt-3 text-slate-300">
-                  Заповніть мінімум даних. У цьому V0 фото ще не аналізуються реально — блок
-                  залишено як місце для наступного AI Vision-модуля.
+                  Заповніть мінімум даних. У цьому V0 фото ще не аналізуються
+                  реально — блок залишено як місце для наступного AI Vision-модуля.
                 </p>
 
                 <div className="mt-8 grid gap-5">
@@ -216,17 +258,23 @@ export default function Home() {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
+
                   <input
                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 outline-none"
                     type="date"
                     value={form.birthDate}
-                    onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, birthDate: e.target.value })
+                    }
                   />
+
                   <input
                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 outline-none"
                     placeholder="Місце народження"
                     value={form.birthPlace}
-                    onChange={(e) => setForm({ ...form, birthPlace: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, birthPlace: e.target.value })
+                    }
                   />
 
                   <div className="grid gap-3 md:grid-cols-3">
@@ -254,7 +302,10 @@ export default function Home() {
                   ))}
                 </div>
 
-                <Button onClick={startProcessing} className="mt-8 w-full rounded-2xl py-6 text-base">
+                <Button
+                  onClick={startProcessing}
+                  className="mt-8 w-full rounded-2xl py-6 text-base"
+                >
                   Згенерувати Карту Ясності <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </CardContent>
@@ -264,7 +315,11 @@ export default function Home() {
 
         {step === "processing" && (
           <main className="flex min-h-[78vh] items-center justify-center">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center"
+            >
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
@@ -273,7 +328,9 @@ export default function Home() {
                 <Sparkles className="h-9 w-9 text-amber-100" />
               </motion.div>
               <h1 className="text-3xl font-semibold">Наводимо фокус...</h1>
-              <p className="mt-3 text-slate-300">Система збирає дзеркало ясності.</p>
+              <p className="mt-3 text-slate-300">
+                Система збирає дзеркало ясності.
+              </p>
             </motion.div>
           </main>
         )}
@@ -282,22 +339,30 @@ export default function Home() {
           <main className="mx-auto max-w-5xl py-12">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">LES AION · Report</p>
+                <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">
+                  LES AION · Report
+                </p>
                 <h1 className="mt-3 text-4xl font-semibold">{report.title}</h1>
               </div>
-              <Button className="rounded-2xl" onClick={() => window.print()}>
+
+              <Button
+                className="no-print rounded-2xl"
+                onClick={() => window.print()}
+              >
                 <Download className="mr-2 h-4 w-4" /> Зберегти як PDF
               </Button>
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
-              <Card className="rounded-[2rem] border-white/10 bg-white/8 backdrop-blur md:col-span-2">
+              <Card className="print-card rounded-[2rem] border-white/10 bg-white/8 backdrop-blur md:col-span-2">
                 <CardContent className="p-7">
                   <div className="flex items-start gap-4">
                     <ShieldCheck className="mt-1 h-6 w-6 text-amber-100" />
                     <div>
                       <h2 className="text-2xl font-semibold">Ядро резонансу</h2>
-                      <p className="mt-3 leading-7 text-slate-300">{report.core}</p>
+                      <p className="mt-3 whitespace-pre-line leading-7 text-slate-300">
+                        {report.core}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -308,14 +373,20 @@ export default function Home() {
               <ReportBlock title="Ризики розфокусу" items={report.risks} />
               <ReportBlock title="Питання ясності" items={report.questions} />
 
-              <Card className="rounded-[2rem] border-amber-200/20 bg-amber-200/10 backdrop-blur md:col-span-2">
+              <Card className="print-card rounded-[2rem] border-amber-200/20 bg-amber-200/10 backdrop-blur md:col-span-2">
                 <CardContent className="p-7">
-                  <h2 className="text-2xl font-semibold text-amber-50">Перший крок на 24 години</h2>
-                  <p className="mt-3 leading-7 text-amber-50/85">{report.firstStep}</p>
+                  <h2 className="text-2xl font-semibold text-amber-50">
+                    Перший крок на 24 години
+                  </h2>
+                  <p className="mt-3 leading-7 text-amber-50/85">
+                    {report.firstStep}
+                  </p>
                 </CardContent>
               </Card>
 
-              <p className="text-sm leading-6 text-slate-500 md:col-span-2">{report.disclaimer}</p>
+              <p className="text-sm leading-6 text-slate-500 md:col-span-2">
+                {report.disclaimer}
+              </p>
             </div>
           </main>
         )}
@@ -326,12 +397,15 @@ export default function Home() {
 
 function ReportBlock({ title, items }: { title: string; items: string[] }) {
   return (
-    <Card className="rounded-[2rem] border-white/10 bg-white/8 backdrop-blur">
+    <Card className="print-card rounded-[2rem] border-white/10 bg-white/8 backdrop-blur">
       <CardContent className="p-7">
         <h2 className="text-2xl font-semibold">{title}</h2>
         <ul className="mt-4 space-y-3">
           {items.map((item) => (
-            <li key={item} className="rounded-2xl bg-slate-900/60 px-4 py-3 text-slate-300">
+            <li
+              key={item}
+              className="rounded-2xl bg-slate-900/60 px-4 py-3 text-slate-300"
+            >
               {item}
             </li>
           ))}

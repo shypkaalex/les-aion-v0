@@ -11,43 +11,52 @@ export async function POST(req: Request) {
     const prompt = `
 Ти — LES AION.
 
-Створи м’який, глибокий AI-звіт українською мовою.
+Створи українською мовою персональну Карту Ясності.
 
-Дані людини:
-- Ім’я: ${body.name}
-- Вік: ${body.age}
-- Що найбільше цікавить: ${body.focus}
-- Що виснажує: ${body.drain}
+Не діагностуй. Не пророкуй. Не кажи "ти є".
+Пиши як дзеркало ясності: м’яко, глибоко, точно.
 
-Структура:
+Дані:
+Ім’я: ${body.name}
+Дата народження: ${body.birthDate}
+Місце народження: ${body.birthPlace}
+Відповідь 1: ${body.answers?.[0]}
+Відповідь 2: ${body.answers?.[1]}
+Відповідь 3: ${body.answers?.[2]}
 
-1. Ядро резонансу
-2. Що живить
-3. Ризики розфокусу
-4. Перший крок на 24 години
+Поверни ТІЛЬКИ JSON:
 
-Говори як дзеркало ясності.
-Не видавай абсолютних тверджень.
+{
+  "title": "Карта Ясності для ...",
+  "archetype": "коротка англомовна назва архетипу, 2 слова",
+  "archetypeSymbol": "один символ або емоджі",
+  "archetypeMeaning": "1-2 речення українською про цей архетип",
+  "core": "глибокий текст Ядра резонансу українською",
+  "resonance": ["3 можливі патерни"],
+  "energy": ["4 джерела енергії"],
+  "risks": ["3 ризики розфокусу"],
+  "questions": ["3 питання ясності"],
+  "firstStep": "один конкретний перший крок на 24 години",
+  "disclaimer": "LES AION не ставить медичних, психологічних чи езотеричних діагнозів. Це інструмент рефлексії, ясності та самоспостереження."
+}
 `;
 
     const completion = await client.chat.completions.create({
       model: "gpt-4.1-mini",
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+      temperature: 0.8,
+      messages: [{ role: "user", content: prompt }],
+      response_format: { type: "json_object" },
     });
 
-    return Response.json({
-      result: completion.choices[0].message.content,
-    });
+    const content = completion.choices[0].message.content;
+
+    if (!content) {
+      return Response.json({ error: "Порожня відповідь AI" }, { status: 500 });
+    }
+
+    return Response.json(JSON.parse(content));
   } catch (error) {
     console.error(error);
-
-    return Response.json({
-      error: "Помилка генерації",
-    });
+    return Response.json({ error: "Помилка генерації" }, { status: 500 });
   }
 }

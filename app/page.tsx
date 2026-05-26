@@ -29,6 +29,9 @@ const defaultForm = {
 
 type ClarityReport = {
   title: string;
+  archetype: string;
+  archetypeSymbol: string;
+  archetypeMeaning: string;
   core: string;
   resonance: string[];
   energy: string[];
@@ -43,6 +46,10 @@ function generateDemoReport(form: typeof defaultForm): ClarityReport {
 
   return {
     title: `Карта Ясності для ${name}`,
+    archetype: "Resonant Builder",
+archetypeSymbol: "✦",
+archetypeMeaning:
+  "Архетип людини, яка будує через резонанс, сенс і живу присутність.",
     core:
       "Ваш поточний вектор виглядає як перехід від розсіювання уваги до збирання внутрішнього ядра. Це не діагноз і не вирок — це дзеркало для самоспостереження.",
     resonance: [
@@ -262,14 +269,13 @@ export default function Home() {
 <label className="grid gap-2">
   <span className="text-sm text-slate-300">Дата народження</span>
   <input
-      className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 text-white appearance-none outline-none"
-  style={{ colorScheme: "dark" }}
-  type="date"
-  value={form.birthDate}
-  onChange={(e) =>
-    setForm({ ...form, birthDate: e.target.value })
-  }
-/>
+    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 text-white placeholder:text-slate-500 outline-none"
+    type="text"
+    inputMode="numeric"
+    placeholder="дд.мм.рррр"
+    value={form.birthDate}
+    onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
+  />
 </label>
 
                   <input
@@ -318,29 +324,114 @@ export default function Home() {
         )}
 
         {step === "processing" && (
-          <main className="flex min-h-[78vh] items-center justify-center">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center"
-            >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-                className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-amber-200/20 bg-amber-200/10"
-              >
-                <Sparkles className="h-9 w-9 text-amber-100" />
-              </motion.div>
-              <h1 className="text-3xl font-semibold">Наводимо фокус...</h1>
-              <p className="mt-3 text-slate-300">
-                Система збирає дзеркало ясності.
-              </p>
-            </motion.div>
-          </main>
-        )}
+  <main className="flex min-h-[78vh] items-center justify-center">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="text-center"
+    >
+      <motion.div
+        animate={{
+          scale: [1, 1.08, 1],
+          opacity: [0.7, 1, 0.7],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 2.4,
+          ease: "easeInOut",
+        }}
+        className="relative mx-auto mb-10 flex h-40 w-40 items-center justify-center"
+      >
+        <div className="absolute h-40 w-40 rounded-full bg-amber-300/10 blur-3xl" />
+
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{
+            repeat: Infinity,
+            duration: 12,
+            ease: "linear",
+          }}
+          className="absolute h-32 w-32 rounded-full border border-amber-200/20"
+        />
+
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{
+            repeat: Infinity,
+            duration: 18,
+            ease: "linear",
+          }}
+          className="absolute h-24 w-24 rounded-full border border-blue-300/10"
+        />
+
+        <Sparkles className="h-12 w-12 text-amber-100" />
+      </motion.div>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="text-4xl font-semibold tracking-tight"
+      >
+        Наводимо фокус...
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.8 }}
+        transition={{ delay: 0.5 }}
+        className="mx-auto mt-4 max-w-md text-lg leading-8 text-slate-300"
+      >
+        LES AION збирає дзеркало ясності та шукає
+        найбільш резонансний вектор.
+      </motion.p>
+    </motion.div>
+  </main>
+)}
 
         {step === "report" && report && (
           <main className="mx-auto max-w-5xl py-12">
+            <motion.section
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.7 }}
+  className="print-card mb-10 overflow-hidden rounded-[2.5rem] border border-amber-200/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-12 text-center shadow-2xl"
+>
+  <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-amber-200/20 bg-amber-200/10">
+    <Sparkles className="h-10 w-10 text-amber-100" />
+  </div>
+
+  <p className="text-sm uppercase tracking-[0.4em] text-amber-100/60">
+    LES AION
+  </p>
+
+  <h1 className="mt-6 text-5xl font-semibold tracking-tight text-white">
+    Карта Ясності
+  </h1>
+
+  <p className="mt-4 text-lg text-slate-300">
+    generated for
+  </p>
+
+  <p className="mt-2 text-2xl font-medium text-amber-50">
+    {form.name || "Unknown"}
+  </p>
+  <div className="mt-6 inline-flex items-center gap-3 rounded-full border border-amber-200/15 bg-amber-200/5 px-5 py-3 text-sm text-amber-100/80">
+  <Sparkles className="h-4 w-4" />
+{report.archetypeSymbol} Archetype: {report.archetype}
+</div>
+<p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-400">
+  {report.archetypeMeaning}
+</p>
+
+  <div className="mt-10 h-px w-full bg-gradient-to-r from-transparent via-amber-200/20 to-transparent" />
+
+  <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-slate-400">
+    <span>{new Date().toLocaleDateString("uk-UA")}</span>
+    <span>•</span>
+    <span>lesaion.world</span>
+  </div>
+</motion.section>
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">

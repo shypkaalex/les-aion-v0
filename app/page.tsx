@@ -269,7 +269,7 @@ export default function Home() {
                   />
 
                   <input
-                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 outline-none"
+                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 text-white [color-scheme:dark] outline-none"
                     placeholder="Місце народження"
                     value={form.birthPlace}
                     onChange={(e) =>

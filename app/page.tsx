@@ -130,14 +130,46 @@ async function requestClarityReport(form: typeof defaultForm): Promise<ClarityRe
     };
   }
 }
+const archetypeThemes: Record<
+  string,
+  {
+    glow: string;
+    border: string;
+  }
+> = {
+  "Purpose Seeker": {
+    glow: "from-amber-300/20",
+    border: "border-amber-200/20",
+  },
 
+  "Signal Walker": {
+    glow: "from-blue-300/20",
+    border: "border-blue-200/20",
+  },
+
+  Flamebearer: {
+    glow: "from-red-300/20",
+    border: "border-red-200/20",
+  },
+
+  "Vision Architect": {
+    glow: "from-violet-300/20",
+    border: "border-violet-200/20",
+  },
+
+  "Resonant Builder": {
+    glow: "from-emerald-300/20",
+    border: "border-emerald-200/20",
+  },
+};
 export default function Home() {
   const [step, setStep] = useState<"landing" | "intake" | "processing" | "report">(
     "landing"
   );
   const [form, setForm] = useState(defaultForm);
   const [report, setReport] = useState<ClarityReport | null>(null);
-
+const currentTheme =
+  archetypeThemes[report?.archetype || "Purpose Seeker"];
   const updateAnswer = (index: number, value: string) => {
     const answers = [...form.answers];
     answers[index] = value;
@@ -391,105 +423,111 @@ export default function Home() {
 
         {step === "report" && report && (
           <main className="mx-auto max-w-5xl py-12">
-            <motion.section
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.7 }}
-  className="print-card mb-10 overflow-hidden rounded-[2.5rem] border border-amber-200/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-12 text-center shadow-2xl"
->
-  <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-amber-200/20 bg-amber-200/10">
-    <Sparkles className="h-10 w-10 text-amber-100" />
+  <motion.section
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.7 }}
+    className={`print-card mb-10 overflow-hidden rounded-[2.5rem] border ${currentTheme.border} bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-12 text-center shadow-2xl`}
+  >
+    <div
+      className={`mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border ${currentTheme.border} bg-gradient-to-br ${currentTheme.glow} to-transparent`}
+    >
+      <Sparkles className="h-10 w-10 text-amber-100" />
+    </div>
+
+    <p className="text-sm uppercase tracking-[0.4em] text-amber-100/60">
+      LES AION
+    </p>
+
+    <h1 className="mt-6 text-5xl font-semibold tracking-tight text-white">
+      Карта Ясності
+    </h1>
+
+    <p className="mt-4 text-lg text-slate-300">generated for</p>
+
+    <p className="mt-2 text-2xl font-medium text-amber-50">
+      {form.name || "Unknown"}
+    </p>
+
+    <div
+      className={`mt-6 inline-flex items-center gap-3 rounded-full border ${currentTheme.border} bg-gradient-to-br ${currentTheme.glow} to-transparent px-5 py-3 text-sm text-amber-100/80`}
+    >
+      <Sparkles className="h-4 w-4" />
+      <span>
+        {report.archetypeSymbol} Archetype: {report.archetype}
+      </span>
+    </div>
+
+    <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-400">
+      {report.archetypeMeaning}
+    </p>
+
+    <div className="mt-10 h-px w-full bg-gradient-to-r from-transparent via-amber-200/20 to-transparent" />
+
+    <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-slate-400">
+      <span>{new Date().toLocaleDateString("uk-UA")}</span>
+      <span>•</span>
+      <span>lesaion.world</span>
+    </div>
+  </motion.section>
+
+  <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">
+        LES AION · Report
+      </p>
+      <h1 className="mt-3 text-4xl font-semibold">{report.title}</h1>
+    </div>
+
+    <Button
+      className="no-print rounded-2xl"
+      onClick={() => window.print()}
+    >
+      <Download className="mr-2 h-4 w-4" /> Зберегти як PDF
+    </Button>
   </div>
 
-  <p className="text-sm uppercase tracking-[0.4em] text-amber-100/60">
-    LES AION
-  </p>
+  <div className="grid gap-5 md:grid-cols-2">
+    <Card className="print-card rounded-[2rem] border-white/10 bg-white/8 backdrop-blur md:col-span-2">
+      <CardContent className="p-7">
+        <div className="flex items-start gap-4">
+          <ShieldCheck className="mt-1 h-6 w-6 text-amber-100" />
+          <div>
+            <h2 className="text-2xl font-semibold">Ядро резонансу</h2>
+            <p className="mt-3 whitespace-pre-line leading-7 text-slate-300">
+              {report.core}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
 
-  <h1 className="mt-6 text-5xl font-semibold tracking-tight text-white">
-    Карта Ясності
-  </h1>
+    <ReportBlock title="Можливі патерни" items={report.resonance} />
+    <ReportBlock title="Що живить" items={report.energy} />
+    <ReportBlock title="Ризики розфокусу" items={report.risks} />
+    <ReportBlock title="Питання ясності" items={report.questions} />
 
-  <p className="mt-4 text-lg text-slate-300">
-    generated for
-  </p>
+    <Card className="print-card rounded-[2rem] border-amber-200/20 bg-amber-200/10 backdrop-blur md:col-span-2">
+      <CardContent className="p-7">
+        <h2 className="text-2xl font-semibold text-amber-50">
+          Перший крок на 24 години
+        </h2>
+        <p className="mt-3 leading-7 text-amber-50/85">
+          {report.firstStep}
+        </p>
+      </CardContent>
+    </Card>
 
-  <p className="mt-2 text-2xl font-medium text-amber-50">
-    {form.name || "Unknown"}
-  </p>
-  <div className="mt-6 inline-flex items-center gap-3 rounded-full border border-amber-200/15 bg-amber-200/5 px-5 py-3 text-sm text-amber-100/80">
-  <Sparkles className="h-4 w-4" />
-{report.archetypeSymbol} Archetype: {report.archetype}
-</div>
-<p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-400">
-  {report.archetypeMeaning}
-</p>
-
-  <div className="mt-10 h-px w-full bg-gradient-to-r from-transparent via-amber-200/20 to-transparent" />
-
-  <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-slate-400">
-    <span>{new Date().toLocaleDateString("uk-UA")}</span>
-    <span>•</span>
-    <span>lesaion.world</span>
+    <p className="text-sm leading-6 text-slate-500 md:col-span-2">
+      {report.disclaimer}
+    </p>
   </div>
-</motion.section>
-            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">
-                  LES AION · Report
-                </p>
-                <h1 className="mt-3 text-4xl font-semibold">{report.title}</h1>
-              </div>
-
-              <Button
-                className="no-print rounded-2xl"
-                onClick={() => window.print()}
-              >
-                <Download className="mr-2 h-4 w-4" /> Зберегти як PDF
-              </Button>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-2">
-              <Card className="print-card rounded-[2rem] border-white/10 bg-white/8 backdrop-blur md:col-span-2">
-                <CardContent className="p-7">
-                  <div className="flex items-start gap-4">
-                    <ShieldCheck className="mt-1 h-6 w-6 text-amber-100" />
-                    <div>
-                      <h2 className="text-2xl font-semibold">Ядро резонансу</h2>
-                      <p className="mt-3 whitespace-pre-line leading-7 text-slate-300">
-                        {report.core}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <ReportBlock title="Можливі патерни" items={report.resonance} />
-              <ReportBlock title="Що живить" items={report.energy} />
-              <ReportBlock title="Ризики розфокусу" items={report.risks} />
-              <ReportBlock title="Питання ясності" items={report.questions} />
-
-              <Card className="print-card rounded-[2rem] border-amber-200/20 bg-amber-200/10 backdrop-blur md:col-span-2">
-                <CardContent className="p-7">
-                  <h2 className="text-2xl font-semibold text-amber-50">
-                    Перший крок на 24 години
-                  </h2>
-                  <p className="mt-3 leading-7 text-amber-50/85">
-                    {report.firstStep}
-                  </p>
-                </CardContent>
-              </Card>
-
-              <p className="text-sm leading-6 text-slate-500 md:col-span-2">
-                {report.disclaimer}
-              </p>
-            </div>
-          </main>
+</main>
         )}
       </div>
     </div>
   );
 }
-
 function ReportBlock({ title, items }: { title: string; items: string[] }) {
   return (
     <Card className="print-card rounded-[2rem] border-white/10 bg-white/8 backdrop-blur">

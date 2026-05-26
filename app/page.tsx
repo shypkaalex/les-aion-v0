@@ -259,14 +259,18 @@ export default function Home() {
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
 
-                  <input
-                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 outline-none"
-                    type="date"
-                    value={form.birthDate}
-                    onChange={(e) =>
-                      setForm({ ...form, birthDate: e.target.value })
-                    }
-                  />
+<label className="grid gap-2">
+  <span className="text-sm text-slate-300">Дата народження</span>
+  <input
+      className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 text-white appearance-none outline-none"
+  style={{ colorScheme: "dark" }}
+  type="date"
+  value={form.birthDate}
+  onChange={(e) =>
+    setForm({ ...form, birthDate: e.target.value })
+  }
+/>
+</label>
 
                   <input
                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 text-white [color-scheme:dark] outline-none"

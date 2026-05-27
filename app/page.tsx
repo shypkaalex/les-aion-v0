@@ -40,7 +40,56 @@ const ListBlock = ({ title, items }: { title: string; items?: string[] }) => {
     </div>
   );
 };
+const EvidenceBlock = ({ items }: { items?: string[] }) => {
+  if (!items || items.length === 0) return null;
 
+  return (
+    <div className="mt-5 rounded-2xl border border-amber-200/10 bg-amber-200/[0.04] p-4">
+      <p className="mb-3 text-xs uppercase tracking-[0.25em] text-amber-100/50">
+        Evidence
+      </p>
+
+      <ul className="space-y-2 text-sm leading-6 text-slate-400">
+        {items.map((item, i) => (
+          <li key={i}>• {item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+const motifLabels: Record<string, string> = {
+  "fluidity": "плинність",
+  "structure": "структура",
+  "rootedness": "вкоріненість",
+  "adaptability": "адаптивність",
+  "observation": "спостереження",
+  "resonance": "резонанс",
+  "emotional permeability": "емоційна проникність",
+  "protection": "захист",
+  "isolation": "ізоляція",
+  "cyclicality": "циклічність",
+  "transformation": "трансформація",
+  "movement": "рух",
+  "containment": "стримування",
+  "initiative": "ініціатива",
+  "loyalty": "лояльність",
+  "duality": "дуальність",
+  "endurance": "витривалість",
+  "intuition": "інтуїція",
+  "discipline": "дисципліна",
+  "unpredictability": "непередбачуваність",
+  "reflection": "рефлексія",
+  "expansion": "розширення",
+  "stability": "стабільність",
+  "leadership": "лідерство",
+  "creativity": "творчість",
+  "sensitivity": "чутливість",
+  "hierarchy": "ієрархія",
+  "independence": "незалежність",
+  "connection": "зв’язок",
+  "persistence": "наполегливість",
+  "silence": "тиша"
+};
 export default function Home() {
   const [step, setStep] = useState<Step>("landing");
   const [form, setForm] = useState(defaultForm);
@@ -79,8 +128,12 @@ export default function Home() {
       const generatedReport = await response.json();
 
       if (!response.ok || generatedReport.error) {
-        throw new Error(generatedReport.error || "Dossier generation failed");
-      }
+  throw new Error(
+    generatedReport.details ||
+      generatedReport.error ||
+      "Dossier generation failed"
+  );
+}
 
       setReport(generatedReport);
       setStep("report");
@@ -273,7 +326,41 @@ export default function Home() {
             мінімальна карта базової конфігурації людини
           </p>
         </section>
+<section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
+  <p className="text-xs uppercase tracking-[0.35em] text-amber-200/60">
+    Домінантна Топологія
+    
+  </p>
 
+  <div className="mt-6 space-y-5">
+  {(
+    report.dominantMotifs?.length
+      ? report.dominantMotifs
+      : Object.entries(report.motifScores || {})
+          .sort((a: any, b: any) => b[1] - a[1])
+          .slice(0, 5)
+          .map(([motif]) => motif)
+  ).map((motif: string) => (
+      <div key={motif}>
+        <div className="mb-2 flex items-center justify-between text-sm text-slate-300">
+          <span>{motifLabels[motif] || motif}</span>
+          <span>
+            {report.motifScores?.[motif] || 0}/5
+          </span>
+        </div>
+
+        <div className="h-2 overflow-hidden rounded-full bg-white/10">
+          <div
+            className="h-full rounded-full bg-amber-200"
+            style={{
+              width: `${((report.motifScores?.[motif] || 0) / 5) * 100}%`,
+            }}
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
         <section className="rounded-[2.5rem] border border-amber-200/10 bg-black/30 p-8">
           <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
             Core Frequency
@@ -282,6 +369,8 @@ export default function Home() {
           <p className="mt-5 text-xl leading-9 text-slate-100">
             {report.coreFrequency?.summary || "—"}
           </p>
+
+          <EvidenceBlock items={report.coreFrequency?.evidence} />
         </section>
 
         <section className="grid gap-5 md:grid-cols-2">
@@ -304,16 +393,28 @@ export default function Home() {
           <p className="mt-5 text-lg leading-8 text-slate-300">
             {report.primaryPolarity?.description || "—"}
           </p>
+          <EvidenceBlock items={report.primaryPolarity?.evidence} />
 
           <div className="mt-6 grid gap-3 md:grid-cols-2">
-            {(report.primaryPolarity?.poles || []).map((item: string, i: number) => (
-              <div
-                key={i}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-slate-300"
-              >
-                {item}
-              </div>
-            ))}
+           
+              <div className="mt-6">
+  <div className="flex items-center justify-between gap-4 text-sm text-slate-300">
+    <span className="max-w-[35%] text-left">
+      {report.primaryPolarity?.poles?.[0] || "полюс 1"}
+    </span>
+
+    <div className="flex-1">
+      <div className="relative h-[2px] rounded-full bg-white/15">
+        <div className="absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-200 bg-slate-950 shadow-[0_0_18px_rgba(253,230,138,0.45)]" />
+      </div>
+    </div>
+
+    <span className="max-w-[35%] text-right">
+      {report.primaryPolarity?.poles?.[1] || "полюс 2"}
+    </span>
+  </div>
+</div>
+            
           </div>
         </section>
 
@@ -329,6 +430,7 @@ export default function Home() {
           <p className="mt-5 text-lg leading-8 text-slate-300">
             {report.resonantRole?.description || "—"}
           </p>
+          <EvidenceBlock items={report.resonantRole?.evidence} />
         </section>
 
         <section className="grid gap-5 md:grid-cols-2">
@@ -351,6 +453,7 @@ export default function Home() {
           <p className="mt-5 text-lg leading-8 text-slate-300">
             {report.shadowConfiguration?.description || "—"}
           </p>
+          <EvidenceBlock items={report.shadowConfiguration?.evidence} />
         </section>
 
         <section className="rounded-[2.5rem] border border-amber-200/10 bg-amber-500/10 p-8">
@@ -361,6 +464,7 @@ export default function Home() {
           <p className="mt-5 text-xl leading-9 text-amber-50">
             {report.firstAlignmentVector?.description || "—"}
           </p>
+          <EvidenceBlock items={report.firstAlignmentVector?.evidence} />
         </section>
 
         <p className="text-center text-sm italic leading-7 text-slate-400">

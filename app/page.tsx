@@ -2,193 +2,95 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Sparkles,
-  Upload,
-  Compass,
-  ShieldCheck,
-  ArrowRight,
-  Download,
-  RefreshCcw,
-} from "lucide-react";
+import { Sparkles, Compass, ArrowRight, RefreshCcw } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-const questions = [
-  "Що зараз найбільше забирає вашу увагу?",
-  "Що вас справді живить, навіть якщо ви давно це відклали?",
-  "Яку одну зміну ви хочете відчути протягом найближчих 30 днів?",
-];
 
 const defaultForm = {
   name: "",
   birthDate: "",
+  birthTime: "",
   birthPlace: "",
-  answers: ["", "", ""],
 };
 
-type ClarityReport = {
-  title: string;
-  archetype: string;
-  archetypeSymbol: string;
-  archetypeMeaning: string;
-  core: string;
-  resonance: string[];
-  energy: string[];
-  risks: string[];
-  questions: string[];
-  firstStep: string;
-  disclaimer: string;
-};
+type Step = "landing" | "intake" | "processing" | "report";
 
-function generateDemoReport(form: typeof defaultForm): ClarityReport {
-  const name = form.name || "Друже";
+type DossierReport = any;
 
-  return {
-    title: `Карта Ясності для ${name}`,
-    archetype: "Resonant Builder",
-archetypeSymbol: "✦",
-archetypeMeaning:
-  "Архетип людини, яка будує через резонанс, сенс і живу присутність.",
-    core:
-      "Ваш поточний вектор виглядає як перехід від розсіювання уваги до збирання внутрішнього ядра. Це не діагноз і не вирок — це дзеркало для самоспостереження.",
-    resonance: [
-      "Схильність шукати сенс, а не просто функцію.",
-      "Потреба у власному ритмі перед зовнішньою продуктивністю.",
-      "Сильний відгук на образи, символи, історії та живу присутність.",
-    ],
-    energy: [
-      "глибока розмова",
-      "простір без шуму",
-      "творчий порядок",
-      "відчуття місії",
-    ],
-    risks: [
-      "перевантаження ідеями без першого кроку",
-      "чужі очікування замість власного фокусу",
-      "пошук ідеальної системи перед дією",
-    ],
-    questions: [
-      "Що я вже знаю, але відкладаю через страх зробити просто?",
-      "Де я плутаю натхнення з втечею від конкретної дії?",
-      "Який один крок поверне мені відчуття керма сьогодні?",
-    ],
-    firstStep:
-      "Протягом 24 годин запишіть 3 речі, які вас реально живлять, і виберіть одну дію на 20 хвилин без телефону, щоб торкнутися однієї з них.",
-    disclaimer:
-      "LES AION не ставить медичних, психологічних чи езотеричних діагнозів. Це інструмент рефлексії, ясності та самоспостереження.",
-  };
-}
-
-async function requestClarityReport(form: typeof defaultForm): Promise<ClarityReport> {
-  const fallback = generateDemoReport(form);
-
-  try {
-    const response = await fetch("/api/clarity-report", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: form.name,
-        birthDate: form.birthDate,
-        birthPlace: form.birthPlace,
-        age: form.birthDate,
-        focus: form.answers[0],
-        drain: form.answers[1],
-        answers: form.answers,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || data.error) {
-      return {
-        ...fallback,
-        core:
-          data.error ||
-          "AI-звіт зараз не згенерувався. Найімовірніше, API потребує кредитів або налаштування. Нижче показано demo-режим LES AION.",
-      };
-    }
-
-    if (data.result) {
-      return {
-        ...fallback,
-        core: data.result,
-      };
-    }
-
-    return {
-      ...fallback,
-      ...data,
-    };
-  } catch {
-    return {
-      ...fallback,
-      core:
-        "AI-звіт зараз не згенерувався через технічну помилку. Нижче показано demo-режим LES AION.",
-    };
-  }
-}
-const archetypeThemes: Record<
-  string,
-  {
-    glow: string;
-    border: string;
-  }
-> = {
-  "Purpose Seeker": {
-    glow: "from-amber-300/20",
-    border: "border-amber-200/20",
-  },
-
-  "Signal Walker": {
-    glow: "from-blue-300/20",
-    border: "border-blue-200/20",
-  },
-
-  Flamebearer: {
-    glow: "from-red-300/20",
-    border: "border-red-200/20",
-  },
-
-  "Vision Architect": {
-    glow: "from-violet-300/20",
-    border: "border-violet-200/20",
-  },
-
-  "Resonant Builder": {
-    glow: "from-emerald-300/20",
-    border: "border-emerald-200/20",
-  },
-};
-export default function Home() {
-  const [step, setStep] = useState<"landing" | "intake" | "processing" | "report">(
-    "landing"
+const InfoBlock = ({ title, text }: { title: string; text?: string }) => {
+  return (
+    <div className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-5">
+      <h3 className="font-semibold text-amber-100">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-slate-300">
+        {text || "—"}
+      </p>
+    </div>
   );
+};
+
+const ListBlock = ({ title, items }: { title: string; items?: string[] }) => {
+  return (
+    <div className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-6">
+      <h2 className="text-xl font-semibold text-white">{title}</h2>
+      <ul className="mt-4 space-y-3 text-slate-300">
+        {(items || []).map((item, i) => (
+          <li key={`${title}-${i}`}>• {item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default function Home() {
+  const [step, setStep] = useState<Step>("landing");
   const [form, setForm] = useState(defaultForm);
-  const [report, setReport] = useState<ClarityReport | null>(null);
-const currentTheme =
-  archetypeThemes[report?.archetype || "Purpose Seeker"];
-  const updateAnswer = (index: number, value: string) => {
-    const answers = [...form.answers];
-    answers[index] = value;
-    setForm({ ...form, answers });
-  };
-
-  const startProcessing = async () => {
-    setStep("processing");
-
-    const generatedReport = await requestClarityReport(form);
-
-    setReport(generatedReport);
-    setStep("report");
-  };
+  const [report, setReport] = useState<DossierReport | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const reset = () => {
     setForm(defaultForm);
     setReport(null);
     setStep("landing");
+  };
+
+  const startProcessing = async () => {
+    if (!form.birthDate) {
+      alert("Вкажи дату народження — це базовий ключ для LES AION v1.");
+      return;
+    }
+
+    setIsGenerating(true);
+    setStep("processing");
+
+    try {
+      const response = await fetch("/api/dossier", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name,
+          birthDate: form.birthDate,
+          birthTime: form.birthTime,
+          birthPlace: form.birthPlace,
+        }),
+      });
+
+      const generatedReport = await response.json();
+
+      if (!response.ok || generatedReport.error) {
+        throw new Error(generatedReport.error || "Dossier generation failed");
+      }
+
+      setReport(generatedReport);
+      setStep("report");
+    } catch (error) {
+      console.error("DOSSIER CLIENT ERROR:", error);
+      alert("Не вдалося створити LES AION DOSSIER");
+      setStep("intake");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -201,12 +103,13 @@ const currentTheme =
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-300/15 ring-1 ring-amber-200/30">
               <Sparkles className="h-5 w-5 text-amber-200" />
             </div>
+
             <div>
               <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">
                 LES AION
               </p>
               <p className="text-xs text-slate-400">
-                V0 · Operating System of Clarity
+                v1 · Default Human Configuration
               </p>
             </div>
           </div>
@@ -224,17 +127,16 @@ const currentTheme =
               transition={{ duration: 0.7 }}
             >
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-amber-200/20 bg-white/5 px-4 py-2 text-sm text-amber-100/80">
-                <Compass className="h-4 w-4" /> Не “ось хто ти”, а “ось дзеркало”
+                <Compass className="h-4 w-4" /> Не “ось хто ти”, а “ось стартові координати”
               </div>
 
               <h1 className="max-w-3xl text-5xl font-semibold tracking-tight md:text-7xl">
-                Карта Ясності для повернення до себе.
+                LES AION v1
               </h1>
 
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                LES AION V0 збирає базові дані та відповіді в один мʼякий
-                AI-звіт: діапазон можливих патернів, джерела енергії, ризики
-                розфокусу і перший крок на 24 години.
+                Default Human Configuration: карта базових символічних координат людини
+                на основі імені, дати народження, часу, місця та системного синтезу.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -242,7 +144,7 @@ const currentTheme =
                   onClick={() => setStep("intake")}
                   className="rounded-2xl px-6 py-6 text-base"
                 >
-                  Створити Карту Ясності <ArrowRight className="ml-2 h-4 w-4" />
+                  Створити Карту <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </motion.section>
@@ -259,18 +161,14 @@ const currentTheme =
                       Preview
                     </p>
                     <h2 className="mt-4 text-2xl font-semibold text-slate-50">
-                      Карта Ясності
+                      Default Dossier
                     </h2>
                     <div className="mt-6 space-y-4 text-sm text-slate-300">
-                      <div className="rounded-2xl bg-white/5 p-4">
-                        Ядро резонансу
-                      </div>
-                      <div className="rounded-2xl bg-white/5 p-4">Що живить</div>
-                      <div className="rounded-2xl bg-white/5 p-4">
-                        Ризики розфокусу
-                      </div>
+                      <div className="rounded-2xl bg-white/5 p-4">Core Frequency</div>
+                      <div className="rounded-2xl bg-white/5 p-4">Default Operating System</div>
+                      <div className="rounded-2xl bg-white/5 p-4">Primary Polarity</div>
                       <div className="rounded-2xl bg-amber-200/10 p-4 text-amber-100">
-                        Перший крок на 24 години
+                        First Alignment Vector
                       </div>
                     </div>
                   </div>
@@ -282,73 +180,60 @@ const currentTheme =
 
         {step === "intake" && (
           <main className="mx-auto max-w-3xl py-12">
-            <Card className="rounded-[2rem] border-white/10 bg-white/8 backdrop-blur">
-              <CardContent className="p-7 md:p-10">
-                <h1 className="text-3xl font-semibold">Вхід у LES AION V0</h1>
-                <p className="mt-3 text-slate-300">
-                  Заповніть мінімум даних. У цьому V0 фото ще не аналізуються
-                  реально — блок залишено як місце для наступного AI Vision-модуля.
-                </p>
+            <Card className="rounded-[2rem] border-white/10 bg-white/5 backdrop-blur">
+              <CardContent className="space-y-6 p-8">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-amber-100/60">
+                    LES AION · DEFAULT DOSSIER
+                  </p>
 
-                <div className="mt-8 grid gap-5">
+                  <h1 className="mt-4 text-3xl font-semibold text-white">
+                    Базові дані
+                  </h1>
+
+                  <p className="mt-3 text-slate-300">
+                    LES AION формує Карту тільки на основі базових координат:
+                    імені, дати народження, часу, місця та символічного синтезу.
+                  </p>
+                </div>
+
+                <div className="grid gap-4">
                   <input
-                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 outline-none"
-                    placeholder="Імʼя або псевдонім"
+                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
+                    placeholder="Імʼя"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
 
-<label className="grid gap-2">
-  <span className="text-sm text-slate-300">Дата народження</span>
-  <input
-    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 text-white placeholder:text-slate-500 outline-none"
-    type="text"
-    inputMode="numeric"
-    placeholder="дд.мм.рррр"
-    value={form.birthDate}
-    onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
-  />
-</label>
-
                   <input
-                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 text-white [color-scheme:dark] outline-none"
-                    placeholder="Місце народження"
-                    value={form.birthPlace}
-                    onChange={(e) =>
-                      setForm({ ...form, birthPlace: e.target.value })
-                    }
+                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
+                    type="date"
+                    value={form.birthDate}
+                    onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
                   />
 
-                  <div className="grid gap-3 md:grid-cols-3">
-                    {["Обличчя", "Долоні", "Тіло"].map((label) => (
-                      <div
-                        key={label}
-                        className="rounded-2xl border border-dashed border-white/15 bg-slate-900/60 p-5 text-center"
-                      >
-                        <Upload className="mx-auto mb-3 h-5 w-5 text-amber-100/80" />
-                        <p className="text-sm text-slate-300">Фото: {label}</p>
-                        <p className="mt-1 text-xs text-slate-500">у V1</p>
-                      </div>
-                    ))}
-                  </div>
+                  <input
+                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
+                    placeholder="Час народження — опційно"
+                    value={form.birthTime}
+                    onChange={(e) => setForm({ ...form, birthTime: e.target.value })}
+                  />
 
-                  {questions.map((q, i) => (
-                    <label key={q} className="grid gap-2">
-                      <span className="text-sm text-slate-300">{q}</span>
-                      <textarea
-                        className="min-h-24 rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-4 outline-none"
-                        value={form.answers[i]}
-                        onChange={(e) => updateAnswer(i, e.target.value)}
-                      />
-                    </label>
-                  ))}
+                  <input
+                    className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
+                    placeholder="Місце народження — опційно"
+                    value={form.birthPlace}
+                    onChange={(e) => setForm({ ...form, birthPlace: e.target.value })}
+                  />
                 </div>
 
                 <Button
                   onClick={startProcessing}
+                  disabled={isGenerating}
                   className="mt-8 w-full rounded-2xl py-6 text-base"
                 >
-                  Згенерувати Карту Ясності <ArrowRight className="ml-2 h-4 w-4" />
+                  {isGenerating ? "Створюю..." : "Згенерувати Карту"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </CardContent>
             </Card>
@@ -356,194 +241,121 @@ const currentTheme =
         )}
 
         {step === "processing" && (
-  <main className="flex min-h-[78vh] items-center justify-center">
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="text-center"
-    >
-      <motion.div
-        animate={{
-          scale: [1, 1.08, 1],
-          opacity: [0.7, 1, 0.7],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 2.4,
-          ease: "easeInOut",
-        }}
-        className="relative mx-auto mb-10 flex h-40 w-40 items-center justify-center"
-      >
-        <div className="absolute h-40 w-40 rounded-full bg-amber-300/10 blur-3xl" />
-
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{
-            repeat: Infinity,
-            duration: 12,
-            ease: "linear",
-          }}
-          className="absolute h-32 w-32 rounded-full border border-amber-200/20"
-        />
-
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{
-            repeat: Infinity,
-            duration: 18,
-            ease: "linear",
-          }}
-          className="absolute h-24 w-24 rounded-full border border-blue-300/10"
-        />
-
-        <Sparkles className="h-12 w-12 text-amber-100" />
-      </motion.div>
-
-      <motion.h1
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="text-4xl font-semibold tracking-tight"
-      >
-        Наводимо фокус...
-      </motion.h1>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.8 }}
-        transition={{ delay: 0.5 }}
-        className="mx-auto mt-4 max-w-md text-lg leading-8 text-slate-300"
-      >
-        LES AION збирає дзеркало ясності та шукає
-        найбільш резонансний вектор.
-      </motion.p>
-    </motion.div>
-  </main>
-)}
+          <main className="mx-auto flex min-h-[70vh] max-w-3xl items-center justify-center py-12">
+            <Card className="rounded-[2rem] border-white/10 bg-white/5 backdrop-blur">
+              <CardContent className="space-y-5 p-10 text-center">
+                <Sparkles className="mx-auto h-10 w-10 animate-pulse text-amber-200" />
+                <h1 className="text-3xl font-semibold text-white">
+                  LES AION синтезує карту...
+                </h1>
+                <p className="text-slate-300">
+                  Зчитуємо стартові координати, архетипні шари та патерни резонансу.
+                </p>
+              </CardContent>
+            </Card>
+          </main>
+        )}
 
         {step === "report" && report && (
           <main className="mx-auto max-w-5xl py-12">
-  <motion.section
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.7 }}
-    className={`print-card mb-10 overflow-hidden rounded-[2.5rem] border ${currentTheme.border} bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-12 text-center shadow-2xl`}
-  >
-    <div
-      className={`mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border ${currentTheme.border} bg-gradient-to-br ${currentTheme.glow} to-transparent`}
-    >
-      <Sparkles className="h-10 w-10 text-amber-100" />
-    </div>
+            <Card className="print-card rounded-[2.5rem] border-white/10 bg-white/5 backdrop-blur">
+              <CardContent className="space-y-8 p-8 md:p-12">
+                <div className="text-center">
+                  <p className="text-xs uppercase tracking-[0.35em] text-amber-100/60">
+                    LES AION · v1
+                  </p>
 
-    <p className="text-sm uppercase tracking-[0.4em] text-amber-100/60">
-      LES AION
-    </p>
+                  <h1 className="mt-4 text-4xl font-semibold text-white">
+                    {report.title || "LES AION v1 DOSSIER"}
+                  </h1>
 
-    <h1 className="mt-6 text-5xl font-semibold tracking-tight text-white">
-      Карта Ясності
-    </h1>
+                  <p className="mt-4 text-slate-300">Default Human Configuration</p>
+                </div>
 
-    <p className="mt-4 text-lg text-slate-300">generated for</p>
+                <InfoBlock title="Core Frequency" text={report.coreFrequency?.summary} />
 
-    <p className="mt-2 text-2xl font-medium text-amber-50">
-      {form.name || "Unknown"}
-    </p>
+                <ListBlock title="Повторювані сигнали" items={report.coreFrequency?.signals} />
 
-    <div
-      className={`mt-6 inline-flex items-center gap-3 rounded-full border ${currentTheme.border} bg-gradient-to-br ${currentTheme.glow} to-transparent px-5 py-3 text-sm text-amber-100/80`}
-    >
-      <Sparkles className="h-4 w-4" />
-      <span>
-        {report.archetypeSymbol} Archetype: {report.archetype}
-      </span>
-    </div>
+                <InfoBlock
+                  title="Default Operating System"
+                  text={report.defaultOperatingSystem?.description}
+                />
 
-    <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-400">
-      {report.archetypeMeaning}
-    </p>
+                <ListBlock
+                  title="Природні сили"
+                  items={report.defaultOperatingSystem?.strengths}
+                />
 
-    <div className="mt-10 h-px w-full bg-gradient-to-r from-transparent via-amber-200/20 to-transparent" />
+                <InfoBlock title="Primary Polarity" text={report.primaryPolarity?.description} />
 
-    <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-slate-400">
-      <span>{new Date().toLocaleDateString("uk-UA")}</span>
-      <span>•</span>
-      <span>lesaion.world</span>
-    </div>
-  </motion.section>
+                <ListBlock title="Полюси напруги" items={report.primaryPolarity?.poles} />
 
-  <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-    <div>
-      <p className="text-sm uppercase tracking-[0.35em] text-amber-100/70">
-        LES AION · Report
-      </p>
-      <h1 className="mt-3 text-4xl font-semibold">{report.title}</h1>
-    </div>
+                <section className="grid gap-4 md:grid-cols-2">
+                  <ListBlock title="Energy Charges" items={report.energyDynamics?.charges} />
+                  <ListBlock title="Energy Leaks" items={report.energyDynamics?.leaks} />
+                </section>
 
-    <Button
-      className="no-print rounded-2xl"
-      onClick={() => window.print()}
-    >
-      <Download className="mr-2 h-4 w-4" /> Зберегти як PDF
-    </Button>
-  </div>
+                <InfoBlock
+                  title="Natural Resonance Field"
+                  text={report.naturalResonanceField?.description}
+                />
 
-  <div className="grid gap-5 md:grid-cols-2">
-    <Card className="print-card rounded-[2rem] border-white/10 bg-white/8 backdrop-blur md:col-span-2">
-      <CardContent className="p-7">
-        <div className="flex items-start gap-4">
-          <ShieldCheck className="mt-1 h-6 w-6 text-amber-100" />
-          <div>
-            <h2 className="text-2xl font-semibold">Ядро резонансу</h2>
-            <p className="mt-3 whitespace-pre-line leading-7 text-slate-300">
-              {report.core}
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+                <ListBlock
+                  title="Середовища резонансу"
+                  items={report.naturalResonanceField?.environments}
+                />
 
-    <ReportBlock title="Можливі патерни" items={report.resonance} />
-    <ReportBlock title="Що живить" items={report.energy} />
-    <ReportBlock title="Ризики розфокусу" items={report.risks} />
-    <ReportBlock title="Питання ясності" items={report.questions} />
+                <section className="rounded-[2rem] border border-amber-200/10 bg-black/30 p-6">
+                  <h2 className="text-2xl font-semibold text-amber-100">
+                    {report.resonantRole?.symbol || "✦"} {report.resonantRole?.name}
+                  </h2>
 
-    <Card className="print-card rounded-[2rem] border-amber-200/20 bg-amber-200/10 backdrop-blur md:col-span-2">
-      <CardContent className="p-7">
-        <h2 className="text-2xl font-semibold text-amber-50">
-          Перший крок на 24 години
-        </h2>
-        <p className="mt-3 leading-7 text-amber-50/85">
-          {report.firstStep}
-        </p>
-      </CardContent>
-    </Card>
+                  <p className="mt-4 text-slate-300 leading-relaxed">
+                    {report.resonantRole?.description}
+                  </p>
+                </section>
 
-    <p className="text-sm leading-6 text-slate-500 md:col-span-2">
-      {report.disclaimer}
-    </p>
-  </div>
-</main>
+                <InfoBlock
+                  title="Shadow Configuration"
+                  text={report.shadowConfiguration?.description}
+                />
+
+                <ListBlock title="Shadow Patterns" items={report.shadowConfiguration?.patterns} />
+
+                <section className="grid gap-4 md:grid-cols-2">
+                  <ListBlock title="Signal" items={report.signalVsNoise?.signal} />
+                  <ListBlock title="Noise" items={report.signalVsNoise?.noise} />
+                </section>
+
+                <section className="rounded-[2rem] border border-amber-200/10 bg-amber-500/10 p-6">
+                  <h2 className="text-xl font-semibold text-amber-100">
+                    First Alignment Vector
+                  </h2>
+
+                  <p className="mt-4 text-slate-200 leading-relaxed">
+                    {report.firstAlignmentVector?.description}
+                  </p>
+                </section>
+
+                <p className="text-center text-slate-400 italic">
+                  {report.closingReflection}
+                </p>
+
+                <Button
+                  onClick={() => window.print()}
+                  className="w-full rounded-2xl py-6 bg-amber-500 text-black hover:bg-amber-400"
+                >
+                  Завантажити PDF
+                </Button>
+
+                <Button onClick={reset} className="w-full rounded-2xl py-6">
+                  Створити нову Карту
+                </Button>
+              </CardContent>
+            </Card>
+          </main>
         )}
       </div>
     </div>
-  );
-}
-function ReportBlock({ title, items }: { title: string; items: string[] }) {
-  return (
-    <Card className="print-card rounded-[2rem] border-white/10 bg-white/8 backdrop-blur">
-      <CardContent className="p-7">
-        <h2 className="text-2xl font-semibold">{title}</h2>
-        <ul className="mt-4 space-y-3">
-          {items.map((item) => (
-            <li
-              key={item}
-              className="rounded-2xl bg-slate-900/60 px-4 py-3 text-slate-300"
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
   );
 }

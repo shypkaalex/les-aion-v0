@@ -257,104 +257,136 @@ export default function Home() {
         )}
 
         {step === "report" && report && (
-          <main className="mx-auto max-w-5xl py-12">
-            <Card className="print-card rounded-[2.5rem] border-white/10 bg-white/5 backdrop-blur">
-              <CardContent className="space-y-8 p-8 md:p-12">
-                <div className="text-center">
-                  <p className="text-xs uppercase tracking-[0.35em] text-amber-100/60">
-                    LES AION · v1
-                  </p>
+  <main className="mx-auto max-w-4xl py-12">
+    <Card className="rounded-[3rem] border-white/10 bg-white/[0.04] backdrop-blur-xl shadow-2xl">
+      <CardContent className="space-y-10 p-8 md:p-14">
+        <section className="text-center">
+          <p className="text-xs uppercase tracking-[0.45em] text-amber-100/50">
+            LES AION · v1
+          </p>
 
-                  <h1 className="mt-4 text-4xl font-semibold text-white">
-                    {report.title || "LES AION v1 DOSSIER"}
-                  </h1>
+          <h1 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-white">
+            Default Dossier
+          </h1>
 
-                  <p className="mt-4 text-slate-300">Default Human Configuration</p>
-                </div>
+          <p className="mt-4 text-slate-400">
+            мінімальна карта базової конфігурації людини
+          </p>
+        </section>
 
-                <InfoBlock title="Core Frequency" text={report.coreFrequency?.summary} />
+        <section className="rounded-[2.5rem] border border-amber-200/10 bg-black/30 p-8">
+          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
+            Core Frequency
+          </p>
 
-                <ListBlock title="Повторювані сигнали" items={report.coreFrequency?.signals} />
+          <p className="mt-5 text-xl leading-9 text-slate-100">
+            {report.coreFrequency?.summary || "—"}
+          </p>
+        </section>
 
-                <InfoBlock
-                  title="Default Operating System"
-                  text={report.defaultOperatingSystem?.description}
-                />
+        <section className="grid gap-5 md:grid-cols-2">
+          <ListBlock
+            title="Signal"
+            items={report.signalVsNoise?.signal}
+          />
 
-                <ListBlock
-                  title="Природні сили"
-                  items={report.defaultOperatingSystem?.strengths}
-                />
+          <ListBlock
+            title="Noise"
+            items={report.signalVsNoise?.noise}
+          />
+        </section>
 
-                <InfoBlock title="Primary Polarity" text={report.primaryPolarity?.description} />
+        <section className="rounded-[2.5rem] border border-white/10 bg-slate-950/70 p-8">
+          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
+            Primary Polarity
+          </p>
 
-                <ListBlock title="Полюси напруги" items={report.primaryPolarity?.poles} />
+          <p className="mt-5 text-lg leading-8 text-slate-300">
+            {report.primaryPolarity?.description || "—"}
+          </p>
 
-                <section className="grid gap-4 md:grid-cols-2">
-                  <ListBlock title="Energy Charges" items={report.energyDynamics?.charges} />
-                  <ListBlock title="Energy Leaks" items={report.energyDynamics?.leaks} />
-                </section>
+          <div className="mt-6 grid gap-3 md:grid-cols-2">
+            {(report.primaryPolarity?.poles || []).map((item: string, i: number) => (
+              <div
+                key={i}
+                className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-slate-300"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </section>
 
-                <InfoBlock
-                  title="Natural Resonance Field"
-                  text={report.naturalResonanceField?.description}
-                />
+        <section className="rounded-[2.5rem] border border-white/10 bg-slate-950/70 p-8">
+          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
+            Resonant Role
+          </p>
 
-                <ListBlock
-                  title="Середовища резонансу"
-                  items={report.naturalResonanceField?.environments}
-                />
+          <h2 className="mt-4 text-3xl font-semibold text-amber-100">
+            {report.resonantRole?.symbol || "✦"} {report.resonantRole?.name || "—"}
+          </h2>
 
-                <section className="rounded-[2rem] border border-amber-200/10 bg-black/30 p-6">
-                  <h2 className="text-2xl font-semibold text-amber-100">
-                    {report.resonantRole?.symbol || "✦"} {report.resonantRole?.name}
-                  </h2>
+          <p className="mt-5 text-lg leading-8 text-slate-300">
+            {report.resonantRole?.description || "—"}
+          </p>
+        </section>
 
-                  <p className="mt-4 text-slate-300 leading-relaxed">
-                    {report.resonantRole?.description}
-                  </p>
-                </section>
+        <section className="grid gap-5 md:grid-cols-2">
+          <ListBlock
+            title="Energy Charges"
+            items={report.energyDynamics?.charges}
+          />
 
-                <InfoBlock
-                  title="Shadow Configuration"
-                  text={report.shadowConfiguration?.description}
-                />
+          <ListBlock
+            title="Energy Leaks"
+            items={report.energyDynamics?.leaks}
+          />
+        </section>
 
-                <ListBlock title="Shadow Patterns" items={report.shadowConfiguration?.patterns} />
+        <section className="rounded-[2.5rem] border border-white/10 bg-slate-950/70 p-8">
+          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
+            Shadow Configuration
+          </p>
 
-                <section className="grid gap-4 md:grid-cols-2">
-                  <ListBlock title="Signal" items={report.signalVsNoise?.signal} />
-                  <ListBlock title="Noise" items={report.signalVsNoise?.noise} />
-                </section>
+          <p className="mt-5 text-lg leading-8 text-slate-300">
+            {report.shadowConfiguration?.description || "—"}
+          </p>
+        </section>
 
-                <section className="rounded-[2rem] border border-amber-200/10 bg-amber-500/10 p-6">
-                  <h2 className="text-xl font-semibold text-amber-100">
-                    First Alignment Vector
-                  </h2>
+        <section className="rounded-[2.5rem] border border-amber-200/10 bg-amber-500/10 p-8">
+          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/60">
+            First Alignment Vector
+          </p>
 
-                  <p className="mt-4 text-slate-200 leading-relaxed">
-                    {report.firstAlignmentVector?.description}
-                  </p>
-                </section>
+          <p className="mt-5 text-xl leading-9 text-amber-50">
+            {report.firstAlignmentVector?.description || "—"}
+          </p>
+        </section>
 
-                <p className="text-center text-slate-400 italic">
-                  {report.closingReflection}
-                </p>
+        <p className="text-center text-sm italic leading-7 text-slate-400">
+          {report.closingReflection}
+        </p>
 
-                <Button
-                  onClick={() => window.print()}
-                  className="w-full rounded-2xl py-6 bg-amber-500 text-black hover:bg-amber-400"
-                >
-                  Завантажити PDF
-                </Button>
+        <div className="no-print grid gap-4">
+          <Button
+            onClick={() => window.print()}
+            className="w-full rounded-2xl bg-amber-400 py-6 text-black hover:bg-amber-300"
+          >
+            Завантажити PDF
+          </Button>
 
-                <Button onClick={reset} className="w-full rounded-2xl py-6">
-                  Створити нову Карту
-                </Button>
-              </CardContent>
-            </Card>
-          </main>
-        )}
+          <Button
+            onClick={reset}
+            variant="secondary"
+            className="w-full rounded-2xl py-6"
+          >
+            Створити нову Карту
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  </main>
+)}
       </div>
     </div>
   );

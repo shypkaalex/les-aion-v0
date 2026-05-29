@@ -1,5 +1,11 @@
 import OpenAI from "openai";
 import { NextRequest, NextResponse } from "next/server";
+import { buildNatalCore } from "@/app/lib/natal";
+import {
+  calculateFactoryVectors,
+  explainTopVectorSources,
+} from "@/lib/les-aion/factoryEngine";
+import { buildMirror } from "@/lib/les-aion/mirrorEngine";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -337,6 +343,13 @@ export async function POST(req: NextRequest) {
       numerology: {
         lifePath: getLifePathNumber(birthDate),
         pythagoreanMatrix: buildPythagoreanMatrix(birthDate),
+
+        natal: buildNatalCore({
+  birthDate,
+  birthTime: body.birthTime,
+  latitude: body.latitude,
+  longitude: body.longitude,
+}),
       },
 
       mayan: {
@@ -344,6 +357,20 @@ export async function POST(req: NextRequest) {
         haab: getMayanHaab(birthDate),
       },
     };
+
+    console.log("DEFAULT DATA KEYS:", Object.keys(defaultData));
+console.log("DEFAULT DATA NATAL:", defaultData.natal);
+const natalCore = buildNatalCore({
+  birthDate,
+  birthTime: body.birthTime,
+  latitude: body.latitude,
+  longitude: body.longitude,
+});
+
+defaultData.natal = natalCore;
+
+console.log("FORCED NATAL:", natalCore);
+console.log("BODY:", body);
 
     const prompt = `
 You are LES AION CORE ENGINE v1.
@@ -410,6 +437,7 @@ SYSTEMS INCLUDED:
 
 You SHOULD actively use ALL systems from INPUT DATA:
 
+0. Natal symbolic layer (highest priority when available)
 1. Western zodiac
 2. Chinese zodiac
 3. Druid tree
@@ -762,6 +790,48 @@ Generate motif scores BEFORE synthesis.
 motifScores are required computational data,
 not optional narrative metadata.
 
+Natal layer interpretation priority:
+
+If natal.available = true:
+- use Sun sign as conscious identity layer,
+- Moon sign as emotional operating layer,
+- Ascendant as external interface layer.
+
+Natal convergence has higher symbolic weight
+than simplified zodiac systems.
+
+If natal.available = true:
+
+You MUST explicitly reference:
+- Sun sign,
+- Moon sign,
+- Ascendant
+
+inside:
+- Core Frequency,
+- Primary Polarity,
+- or Resonant Role.
+
+Natal layer cannot be ignored when available.
+
+At least one evidence block MUST explain:
+- how natal layer reinforces,
+- modifies,
+- or contradicts
+the symbolic topology.
+
+Do not explain natal astrology traditionally.
+
+Use natal data as symbolic topology signals.
+
+When natal data is available,
+evidence should include convergence or tension
+between:
+- natal layer,
+- symbolic motifs,
+- polarity axes,
+- resonance role.
+
 OUTPUT JSON ONLY.
 
 Do not use placeholder phrases.
@@ -947,12 +1017,10 @@ If one motif is strongest, explain what supports it, what balances it, and what 
       "чому саме цей крок випливає з карти"
     ]
   },
-
-  "closingReflection": "коротке сильне завершення українською"
 }
 `;
-
-    const completion = await client.chat.completions.create({
+console.log("DEFAULT DATA:", defaultData);
+        const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       temperature: 0.55,
       messages: [
@@ -969,14 +1037,55 @@ If one motif is strongest, explain what supports it, what balances it, and what 
     });
 
     const text = completion.choices[0]?.message?.content || "{}";
-    const cleaned = text.replace(/```json/g, "").replace(/```/g, "").trim();
 
-    return NextResponse.json({
-      ...JSON.parse(cleaned),
-      rawDefaultData: defaultData,
-    });
+    const cleaned = text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    const parsedReport = JSON.parse(cleaned);
+
+const factoryVectors = calculateFactoryVectors({
+  
+  sun: defaultData.natal?.sun,
+  moon: defaultData.natal?.moon,
+  ascendant: defaultData.natal?.ascendant,
+  mercury: defaultData.natal?.mercury,
+  venus: defaultData.natal?.venus,
+  mars: defaultData.natal?.mars,
+});
+
+const vectorSources = explainTopVectorSources(
+  {
+    sun: defaultData.natal?.sun,
+    moon: defaultData.natal?.moon,
+    ascendant: defaultData.natal?.ascendant,
+    mercury: defaultData.natal?.mercury,
+    venus: defaultData.natal?.venus,
+    mars: defaultData.natal?.mars,
+  },
+  factoryVectors,
+);
+
+const mirror = buildMirror(factoryVectors);
+const finalReport = {
+  ...parsedReport,
+  DEBUG_API_VERSION: "MIRROR_ENGINE_V1",
+  natal: defaultData.natal,
+  factoryVectors,
+  mirror,
+  vectorSources,
+  rawDefaultData: defaultData,
+};
+
+    console.log("FINAL REPORT NATAL:", finalReport.natal);
+    console.log("FACTORY VECTORS:", finalReport.factoryVectors);
+    console.log("FINAL REPORT KEYS:", Object.keys(finalReport));
+
+    return NextResponse.json(finalReport);
   } catch (error) {
     console.error("DOSSIER ERROR:", error);
+
     return NextResponse.json(
       {
         error: "Не вдалося створити LES AION DOSSIER",

@@ -6,16 +6,38 @@ import { Sparkles, Compass, ArrowRight, RefreshCcw } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+const SIGN_UA: Record<string, string> = {
+  Aries: "Овен",
+  Taurus: "Телець",
+  Gemini: "Близнюки",
+  Cancer: "Рак",
+  Leo: "Лев",
+  Virgo: "Діва",
+  Libra: "Терези",
+  Scorpio: "Скорпіон",
+  Sagittarius: "Стрілець",
+  Capricorn: "Козоріг",
+  Aquarius: "Водолій",
+  Pisces: "Риби",
+};
+
+function signUa(sign?: string | null) {
+  if (!sign) return "—";
+  return SIGN_UA[sign] ?? sign;
+}
+
+type Step = "landing" | "intake" | "processing" | "report";
+
+type DossierReport = any;
+
 const defaultForm = {
   name: "",
   birthDate: "",
   birthTime: "",
   birthPlace: "",
+  latitude: "",
+  longitude: "",
 };
-
-type Step = "landing" | "intake" | "processing" | "report";
-
-type DossierReport = any;
 
 const InfoBlock = ({ title, text }: { title: string; text?: string }) => {
   return (
@@ -90,9 +112,10 @@ const motifLabels: Record<string, string> = {
   "persistence": "наполегливість",
   "silence": "тиша"
 };
+
 export default function Home() {
-  const [step, setStep] = useState<Step>("landing");
   const [form, setForm] = useState(defaultForm);
+  const [step, setStep] = useState<Step>("landing");
   const [report, setReport] = useState<DossierReport | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -112,6 +135,7 @@ export default function Home() {
     setStep("processing");
 
     try {
+      console.log("FORM BEFORE FETCH:", form);
       const response = await fetch("/api/dossier", {
         method: "POST",
         headers: {
@@ -122,11 +146,13 @@ export default function Home() {
           birthDate: form.birthDate,
           birthTime: form.birthTime,
           birthPlace: form.birthPlace,
+          latitude: form.latitude,
+          longitude: form.longitude,
         }),
       });
 
       const generatedReport = await response.json();
-
+console.log(generatedReport);
       if (!response.ok || generatedReport.error) {
   throw new Error(
     generatedReport.details ||
@@ -136,6 +162,12 @@ export default function Home() {
 }
 
       setReport(generatedReport);
+      console.log("GENERATED REPORT:", generatedReport);
+console.log("NATAL:", generatedReport.natal);
+console.table(generatedReport.factoryVectors);
+console.log("MIRROR:", generatedReport.mirror);
+console.log("VECTOR SOURCES:", generatedReport.vectorSources);
+
       setStep("report");
     } catch (error) {
       console.error("DOSSIER CLIENT ERROR:", error);
@@ -162,13 +194,13 @@ export default function Home() {
                 LES AION
               </p>
               <p className="text-xs text-slate-400">
-                v1 · Default Human Configuration
+                Система повернення Людини до Себе
               </p>
             </div>
           </div>
 
           <Button variant="secondary" onClick={reset} className="rounded-2xl">
-            <RefreshCcw className="mr-2 h-4 w-4" /> Reset
+            <RefreshCcw className="mr-2 h-4 w-4" /> Оновити
           </Button>
         </header>
 
@@ -180,16 +212,15 @@ export default function Home() {
               transition={{ duration: 0.7 }}
             >
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-amber-200/20 bg-white/5 px-4 py-2 text-sm text-amber-100/80">
-                <Compass className="h-4 w-4" /> Не “ось хто ти”, а “ось стартові координати”
+                <Compass className="h-4 w-4" /> Повернення до Себе. Крок 1
               </div>
 
               <h1 className="max-w-3xl text-5xl font-semibold tracking-tight md:text-7xl">
-                LES AION v1
+                LES AION DOSSIER
               </h1>
 
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                Default Human Configuration: карта базових символічних координат людини
-                на основі імені, дати народження, часу, місця та системного синтезу.
+                Дзеркало базової конфігурації Людини
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -197,7 +228,7 @@ export default function Home() {
                   onClick={() => setStep("intake")}
                   className="rounded-2xl px-6 py-6 text-base"
                 >
-                  Створити Карту <ArrowRight className="ml-2 h-4 w-4" />
+                  Подивитись у Дзеркало <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </motion.section>
@@ -211,17 +242,18 @@ export default function Home() {
                 <CardContent className="p-7">
                   <div className="rounded-[1.5rem] border border-amber-200/15 bg-slate-900/70 p-6">
                     <p className="text-sm uppercase tracking-[0.3em] text-amber-100/60">
-                      Preview
+                      У ДОСЬЄ
                     </p>
                     <h2 className="mt-4 text-2xl font-semibold text-slate-50">
-                      Default Dossier
+                      Ви у Дзеркалі
+            
                     </h2>
                     <div className="mt-6 space-y-4 text-sm text-slate-300">
-                      <div className="rounded-2xl bg-white/5 p-4">Core Frequency</div>
-                      <div className="rounded-2xl bg-white/5 p-4">Default Operating System</div>
-                      <div className="rounded-2xl bg-white/5 p-4">Primary Polarity</div>
+                      <div className="rounded-2xl bg-white/5 p-4">Ваші вроджені якості</div>
+                      <div className="rounded-2xl bg-white/5 p-4">Що Вас наповнює</div>
+                      <div className="rounded-2xl bg-white/5 p-4">Що Вас виснажує</div>
                       <div className="rounded-2xl bg-amber-200/10 p-4 text-amber-100">
-                        First Alignment Vector
+                        Чому система так вважає
                       </div>
                     </div>
                   </div>
@@ -237,7 +269,7 @@ export default function Home() {
               <CardContent className="space-y-6 p-8">
                 <div>
                   <p className="text-xs uppercase tracking-[0.35em] text-amber-100/60">
-                    LES AION · DEFAULT DOSSIER
+                    LES AION · DOSSIER
                   </p>
 
                   <h1 className="mt-4 text-3xl font-semibold text-white">
@@ -245,8 +277,7 @@ export default function Home() {
                   </h1>
 
                   <p className="mt-3 text-slate-300">
-                    LES AION формує Карту тільки на основі базових координат:
-                    імені, дати народження, часу, місця та символічного синтезу.
+                    LES AION формує Досьє тільки на основі базових даних та символічного синтезу.
                   </p>
                 </div>
 
@@ -274,10 +305,24 @@ export default function Home() {
 
                   <input
                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
-                    placeholder="Місце народження — опційно"
+                    placeholder="Місце народження"
                     value={form.birthPlace}
                     onChange={(e) => setForm({ ...form, birthPlace: e.target.value })}
                   />
+
+                  <input
+                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
+                     placeholder="Широта — напр. 49.8397"
+                     value={form.latitude}
+                     onChange={(e) => setForm({ ...form, latitude: e.target.value })}
+                   />
+
+                  <input
+                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
+                     placeholder="Довгота — напр. 24.0297"
+                     value={form.longitude}
+                     onChange={(e) => setForm({ ...form, longitude: e.target.value })}
+                    />
                 </div>
 
                 <Button
@@ -285,7 +330,7 @@ export default function Home() {
                   disabled={isGenerating}
                   className="mt-8 w-full rounded-2xl py-6 text-base"
                 >
-                  {isGenerating ? "Створюю..." : "Згенерувати Карту"}
+                  {isGenerating ? "Створюю..." : "Згенерувати Досьє"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </CardContent>
@@ -299,7 +344,7 @@ export default function Home() {
               <CardContent className="space-y-5 p-10 text-center">
                 <Sparkles className="mx-auto h-10 w-10 animate-pulse text-amber-200" />
                 <h1 className="text-3xl font-semibold text-white">
-                  LES AION синтезує карту...
+                  LES AION синтезує Досьє...
                 </h1>
                 <p className="text-slate-300">
                   Зчитуємо стартові координати, архетипні шари та патерни резонансу.
@@ -319,158 +364,191 @@ export default function Home() {
           </p>
 
           <h1 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-white">
-            Default Dossier
+            LES AION DOSSIER
+            <pre className="text-xs text-white">
+</pre>
           </h1>
 
           <p className="mt-4 text-slate-400">
-            мінімальна карта базової конфігурації людини
+            Базова конфігурація Людини
           </p>
         </section>
-<section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
-  <p className="text-xs uppercase tracking-[0.35em] text-amber-200/60">
-    Домінантна Топологія
-    
-  </p>
 
-  <div className="mt-6 space-y-5">
-  {(
-    report.dominantMotifs?.length
-      ? report.dominantMotifs
-      : Object.entries(report.motifScores || {})
-          .sort((a: any, b: any) => b[1] - a[1])
-          .slice(0, 5)
-          .map(([motif]) => motif)
-  ).map((motif: string) => (
-      <div key={motif}>
-        <div className="mb-2 flex items-center justify-between text-sm text-slate-300">
-          <span>{motifLabels[motif] || motif}</span>
-          <span>
-            {report.motifScores?.[motif] || 0}/5
+{(report as any)?.factoryVectors?.length > 0 && (
+  <section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
+    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/60">
+      Найсильніші вроджені якості
+    </p>
+
+    <div className="mt-6 space-y-5">
+      {(report as any).factoryVectors.slice(0, 5).map((vector: any) => (
+        <div key={vector.key}>
+          <div className="mb-2 flex items-center justify-between gap-4">
+            <p className="text-base text-white">
+              {vector.label}
+            </p>
+            <p className="text-sm text-white/70">
+              {vector.level}
+            </p>
+          </div>
+
+          <div className="h-2 overflow-hidden rounded-full bg-white/10">
+            <div
+              className="h-full rounded-full bg-amber-200"
+              style={{
+                width: `${Math.min(Math.max(vector.score * 12, 8), 100)}%`,
+              }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
+
+{report?.natal?.available && (
+  <>
+  
+  {report?.mirror && (
+  <section className="rounded-[2rem] border border-amber-200/20 bg-amber-100/[0.06] p-8">
+    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">
+      ДЗЕРКАЛО
+    </p>
+
+    <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
+      <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
+        Підстави
+      </p>
+
+      <div className="mt-4 flex flex-wrap gap-3">
+        {report.mirror.evidence?.map((item: string) => (
+          <span
+            key={item}
+            className="rounded-full border border-amber-200/20 bg-amber-100/10 px-4 py-2 text-sm text-amber-100"
+          >
+            {item}
           </span>
-        </div>
-
-        <div className="h-2 overflow-hidden rounded-full bg-white/10">
-          <div
-            className="h-full rounded-full bg-amber-200"
-            style={{
-              width: `${((report.motifScores?.[motif] || 0) / 5) * 100}%`,
-            }}
-          />
-        </div>
+        ))}
       </div>
-    ))}
-  </div>
-</section>
-        <section className="rounded-[2.5rem] border border-amber-200/10 bg-black/30 p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
-            Core Frequency
-          </p>
+    </div>
+  </section>
+)}
+</>
+)}
 
-          <p className="mt-5 text-xl leading-9 text-slate-100">
-            {report.coreFrequency?.summary || "—"}
-          </p>
+{(report as any)?.mirror?.strengths?.length > 0 && (
+  <section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
+    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/60">
+      Що в мені сильне від народження
+    </p>
 
-          <EvidenceBlock items={report.coreFrequency?.evidence} />
-        </section>
+    <ul className="mt-6 space-y-3 text-lg leading-relaxed text-white">
+      {(report as any).mirror.strengths.map((item: string) => (
+        <li key={item}>• {item}</li>
+      ))}
+    </ul>
+  </section>
+)}
 
-        <section className="grid gap-5 md:grid-cols-2">
-          <ListBlock
-            title="Signal"
-            items={report.signalVsNoise?.signal}
-          />
+{(report as any)?.mirror?.nourishes?.length > 0 && (
+  <section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
+    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/60">
+      Що мене наповнює
+    </p>
 
-          <ListBlock
-            title="Noise"
-            items={report.signalVsNoise?.noise}
-          />
-        </section>
+    <ul className="mt-6 space-y-3 text-lg leading-relaxed text-white">
+      {(report as any).mirror.nourishes.map((item: string) => (
+        <li key={item}>• {item}</li>
+      ))}
+    </ul>
+  </section>
+)}
 
-        <section className="rounded-[2.5rem] border border-white/10 bg-slate-950/70 p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
-            Primary Polarity
-          </p>
+{(report as any)?.mirror?.drains?.length > 0 && (
+  <section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
+    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/60">
+      Що мене виснажує
+    </p>
 
-          <p className="mt-5 text-lg leading-8 text-slate-300">
-            {report.primaryPolarity?.description || "—"}
-          </p>
-          <EvidenceBlock items={report.primaryPolarity?.evidence} />
+    <ul className="mt-6 space-y-3 text-lg leading-relaxed text-white">
+      {(report as any).mirror.drains.map((item: string) => (
+        <li key={item}>• {item}</li>
+      ))}
+    </ul>
+  </section>
+)}
 
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
-           
-              <div className="mt-6">
-  <div className="flex items-center justify-between gap-4 text-sm text-slate-300">
-    <span className="max-w-[35%] text-left">
-      {report.primaryPolarity?.poles?.[0] || "полюс 1"}
-    </span>
+{(report as any)?.mirror?.tension && (
+  <section className="rounded-[2rem] border border-amber-200/20 bg-amber-100/[0.06] p-8">
+    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">
+      Моя внутрішня напруга
+    </p>
 
-    <div className="flex-1">
-      <div className="relative h-[2px] rounded-full bg-white/15">
-        <div className="absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-200 bg-slate-950 shadow-[0_0_18px_rgba(253,230,138,0.45)]" />
+    <p className="mt-6 text-xl leading-relaxed text-white">
+      {(report as any).mirror.tension}
+    </p>
+  </section>  
+)}
+<section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
+    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/60">
+      Чому система так вважає
+    </p>
+
+    <div className="mt-6 grid gap-4 md:grid-cols-3">
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+        <p className="text-xs uppercase tracking-[0.25em] text-slate-500">
+          Сонце
+        </p>
+        <p className="mt-2 text-lg text-white">
+          {signUa(report.natal.sun)}
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+        <p className="text-xs uppercase tracking-[0.25em] text-slate-500">
+          Місяць
+        </p>
+        <p className="mt-2 text-lg text-white">
+          {signUa(report.natal.moon)}
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+        <p className="text-xs uppercase tracking-[0.25em] text-slate-500">
+          Асцендент
+        </p>
+        <p className="mt-2 text-lg text-white">
+         {signUa(report.natal.ascendant)}
+        </p>
       </div>
     </div>
 
-    <span className="max-w-[35%] text-right">
-      {report.primaryPolarity?.poles?.[1] || "полюс 2"}
-    </span>
+    <p className="mt-5 text-sm leading-7 text-slate-400">
+      {(report as any)?.vectorSources?.map((vector: any) => (
+  <div
+    key={vector.vectorKey}
+    className="mb-6 rounded-xl border border-white/10 p-4"
+  >
+    <p className="font-semibold text-white">
+      {vector.vectorLabel}
+    </p>
+
+    <p className="mt-1 text-sm text-amber-200">
+      Підсумок: {vector.total}
+    </p>
+
+    <div className="mt-3 space-y-1 text-sm text-slate-300">
+      {vector.sources.map((source: any) => (
+        <div key={`${source.source}-${source.sign}`}>
+          {source.source} ({signUa(source.sign)}) +{source.score}
+        </div>
+      ))}
+    </div>
   </div>
-</div>
-            
-          </div>
-        </section>
-
-        <section className="rounded-[2.5rem] border border-white/10 bg-slate-950/70 p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
-            Resonant Role
-          </p>
-
-          <h2 className="mt-4 text-3xl font-semibold text-amber-100">
-            {report.resonantRole?.symbol || "✦"} {report.resonantRole?.name || "—"}
-          </h2>
-
-          <p className="mt-5 text-lg leading-8 text-slate-300">
-            {report.resonantRole?.description || "—"}
-          </p>
-          <EvidenceBlock items={report.resonantRole?.evidence} />
-        </section>
-
-        <section className="grid gap-5 md:grid-cols-2">
-          <ListBlock
-            title="Energy Charges"
-            items={report.energyDynamics?.charges}
-          />
-
-          <ListBlock
-            title="Energy Leaks"
-            items={report.energyDynamics?.leaks}
-          />
-        </section>
-
-        <section className="rounded-[2.5rem] border border-white/10 bg-slate-950/70 p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/50">
-            Shadow Configuration
-          </p>
-
-          <p className="mt-5 text-lg leading-8 text-slate-300">
-            {report.shadowConfiguration?.description || "—"}
-          </p>
-          <EvidenceBlock items={report.shadowConfiguration?.evidence} />
-        </section>
-
-        <section className="rounded-[2.5rem] border border-amber-200/10 bg-amber-500/10 p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-amber-100/60">
-            First Alignment Vector
-          </p>
-
-          <p className="mt-5 text-xl leading-9 text-amber-50">
-            {report.firstAlignmentVector?.description || "—"}
-          </p>
-          <EvidenceBlock items={report.firstAlignmentVector?.evidence} />
-        </section>
-
-        <p className="text-center text-sm italic leading-7 text-slate-400">
-          {report.closingReflection}
-        </p>
-
+))}
+    </p>
+  </section>
+      
         <div className="no-print grid gap-4">
           <Button
             onClick={() => window.print()}

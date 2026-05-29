@@ -34,9 +34,13 @@ export function buildNatalCore(input: NatalInput) {
   console.log("NATAL INPUT:", input);
   if (!hasFullNatalData) {
     return {
-      available: false,
-      note: "Натальний шар неповний.",
-    };
+  available: false,
+  partial: true,
+  sun: sunSign,
+  moon: moonSign,
+  ascendant: null,
+  summary: "Натальний шар частковий. Для повного аналізу потрібен час народження.",
+};
   }
 
   const [year, month, day] = input.birthDate.split("-").map(Number);

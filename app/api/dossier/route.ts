@@ -360,12 +360,21 @@ export async function POST(req: NextRequest) {
 
     console.log("DEFAULT DATA KEYS:", Object.keys(defaultData));
 
-const natalCore = buildNatalCore({
-  birthDate,
-  birthTime: body.birthTime,
-  latitude: body.latitude,
-  longitude: body.longitude,
-});
+const natalCore =
+  body.birthTime && body.latitude && body.longitude
+    ? buildNatalCore({
+        birthDate,
+        birthTime: body.birthTime,
+        latitude: body.latitude,
+        longitude: body.longitude,
+      })
+    : {
+        available: false,
+        sun: null,
+        moon: null,
+        ascendant: null,
+        summary: "Натальний шар не розраховано: не вказано час народження.",
+      };
 
 
 console.log("FORCED NATAL:", natalCore);
@@ -1044,20 +1053,24 @@ console.log("DEFAULT DATA:", defaultData);
 
     const parsedReport = JSON.parse(cleaned);
 
-const factoryVectors = calculateFactoryVectors({
-  sun: natalCore.sun,
-  moon: natalCore.moon,
-  ascendant: natalCore.ascendant,
-});
+const factoryVectors = natalCore.available
+  ? calculateFactoryVectors({
+      sun: natalCore.sun,
+      moon: natalCore.moon,
+      ascendant: natalCore.ascendant,
+    })
+  : [];
 
-const vectorSources = explainTopVectorSources(
-  {
-    sun: natalCore.sun,
-    moon: natalCore.moon,
-    ascendant: natalCore.ascendant,
-  },
-  factoryVectors,
-);
+const vectorSources = natalCore.available
+  ? explainTopVectorSources(
+      {
+        sun: natalCore.sun,
+        moon: natalCore.moon,
+        ascendant: natalCore.ascendant,
+      },
+      factoryVectors,
+    )
+  : [];
 
 const mirror = buildMirror(factoryVectors);
 const finalReport = {

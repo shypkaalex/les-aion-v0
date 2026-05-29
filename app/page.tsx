@@ -298,11 +298,14 @@ console.log("VECTOR SOURCES:", generatedReport.vectorSources);
 
                   <input
                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
-                    placeholder="Час народження — опційно"
+                    placeholder="Час народження (наприклад 12:00)"
                     value={form.birthTime}
                     onChange={(e) => setForm({ ...form, birthTime: e.target.value })}
+                    required
                   />
-
+<p className="mt-2 text-xs text-slate-500">
+   Для побудови Дзеркала потрібен час народження. Якщо точний час невідомий, введіть приблизний.
+</p>
                   <input
                     className="rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
                     placeholder="Місце народження"
@@ -344,7 +347,7 @@ console.log("VECTOR SOURCES:", generatedReport.vectorSources);
               <CardContent className="space-y-5 p-10 text-center">
                 <Sparkles className="mx-auto h-10 w-10 animate-pulse text-amber-200" />
                 <h1 className="text-3xl font-semibold text-white">
-                  LES AION синтезує Досьє...
+                  LES AION синтезує ...
                 </h1>
                 <p className="text-slate-300">
                   Зчитуємо стартові координати, архетипні шари та патерни резонансу.
@@ -409,30 +412,7 @@ console.log("VECTOR SOURCES:", generatedReport.vectorSources);
 {report?.natal?.available && (
   <>
   
-  {report?.mirror && (
-  <section className="rounded-[2rem] border border-amber-200/20 bg-amber-100/[0.06] p-8">
-    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">
-      ДЗЕРКАЛО
-    </p>
-
-    <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
-      <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
-        Підстави
-      </p>
-
-      <div className="mt-4 flex flex-wrap gap-3">
-        {report.mirror.evidence?.map((item: string) => (
-          <span
-            key={item}
-            className="rounded-full border border-amber-200/20 bg-amber-100/10 px-4 py-2 text-sm text-amber-100"
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
-  </section>
-)}
+  
 </>
 )}
 
@@ -489,7 +469,8 @@ console.log("VECTOR SOURCES:", generatedReport.vectorSources);
     </p>
   </section>  
 )}
-<section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
+{(report as any)?.vectorSources?.length > 0 && (
+  <section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
     <p className="text-xs uppercase tracking-[0.35em] text-amber-200/60">
       Чому система так вважає
     </p>
@@ -518,36 +499,35 @@ console.log("VECTOR SOURCES:", generatedReport.vectorSources);
           Асцендент
         </p>
         <p className="mt-2 text-lg text-white">
-         {signUa(report.natal.ascendant)}
+          {signUa(report.natal.ascendant)}
         </p>
       </div>
     </div>
 
-    <p className="mt-5 text-sm leading-7 text-slate-400">
-      {(report as any)?.vectorSources?.map((vector: any) => (
-  <div
-    key={vector.vectorKey}
-    className="mb-6 rounded-xl border border-white/10 p-4"
-  >
-    <p className="font-semibold text-white">
-      {vector.vectorLabel}
-    </p>
+    <div className="mt-5 text-sm leading-7 text-slate-400">
+      {(report as any).vectorSources.map((vector: any) => (
+        <div
+          key={vector.vectorKey}
+          className="mb-6 rounded-xl border border-white/10 p-4"
+        >
+          <p className="font-semibold text-white">{vector.vectorLabel}</p>
 
-    <p className="mt-1 text-sm text-amber-200">
-      Підсумок: {vector.total}
-    </p>
+          <p className="mt-1 text-sm text-amber-200">
+            Підсумок: {vector.total}
+          </p>
 
-    <div className="mt-3 space-y-1 text-sm text-slate-300">
-      {vector.sources.map((source: any) => (
-        <div key={`${source.source}-${source.sign}`}>
-          {source.source} ({signUa(source.sign)}) +{source.score}
+          <div className="mt-3 space-y-1 text-sm text-slate-300">
+            {vector.sources.map((source: any) => (
+              <div key={`${source.source}-${source.sign}`}>
+                {source.source} ({signUa(source.sign)}) +{source.score}
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
-  </div>
-))}
-    </p>
   </section>
+)}
       
         <div className="no-print grid gap-4">
           <Button

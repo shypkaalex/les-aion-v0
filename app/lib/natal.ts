@@ -34,12 +34,6 @@ export function buildNatalCore(input: NatalInput) {
   console.log("NATAL INPUT:", input);
   if (!hasFullNatalData) {
     return {
-  available: false,
-  partial: true,
-  sun: sunSign,
-  moon: moonSign,
-  ascendant: null,
-  summary: "Натальний шар частковий. Для повного аналізу потрібен час народження.",
 };
   }
 

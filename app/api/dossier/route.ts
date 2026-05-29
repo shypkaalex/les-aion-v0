@@ -359,7 +359,7 @@ export async function POST(req: NextRequest) {
     };
 
     console.log("DEFAULT DATA KEYS:", Object.keys(defaultData));
-console.log("DEFAULT DATA NATAL:", defaultData.natal);
+
 const natalCore = buildNatalCore({
   birthDate,
   birthTime: body.birthTime,
@@ -367,7 +367,6 @@ const natalCore = buildNatalCore({
   longitude: body.longitude,
 });
 
-defaultData.natal = natalCore;
 
 console.log("FORCED NATAL:", natalCore);
 console.log("BODY:", body);
@@ -1046,23 +1045,16 @@ console.log("DEFAULT DATA:", defaultData);
     const parsedReport = JSON.parse(cleaned);
 
 const factoryVectors = calculateFactoryVectors({
-  
-  sun: defaultData.natal?.sun,
-  moon: defaultData.natal?.moon,
-  ascendant: defaultData.natal?.ascendant,
-  mercury: defaultData.natal?.mercury,
-  venus: defaultData.natal?.venus,
-  mars: defaultData.natal?.mars,
+  sun: natalCore.sun,
+  moon: natalCore.moon,
+  ascendant: natalCore.ascendant,
 });
 
 const vectorSources = explainTopVectorSources(
   {
-    sun: defaultData.natal?.sun,
-    moon: defaultData.natal?.moon,
-    ascendant: defaultData.natal?.ascendant,
-    mercury: defaultData.natal?.mercury,
-    venus: defaultData.natal?.venus,
-    mars: defaultData.natal?.mars,
+    sun: natalCore.sun,
+    moon: natalCore.moon,
+    ascendant: natalCore.ascendant,
   },
   factoryVectors,
 );
@@ -1071,7 +1063,7 @@ const mirror = buildMirror(factoryVectors);
 const finalReport = {
   ...parsedReport,
   DEBUG_API_VERSION: "MIRROR_ENGINE_V1",
-  natal: defaultData.natal,
+  natal: natalCore,
   factoryVectors,
   mirror,
   vectorSources,

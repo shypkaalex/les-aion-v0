@@ -31,8 +31,7 @@ export default function ReturnToYourselfPage() {
           className="text-2xl leading-relaxed mb-12"
           style={{ color: "rgba(255,255,255,0.8)" }}
         >
-          Будь-яка справжня зміна починається не зі світу.
-          Вона починається з людини.
+          Практичний наслідок розуміння своїх талантів, ясності власних цілей, живого інтересу та працюючої ШІ-команди - вимірюваний реальний результат.
         </p>
 
         <div className="space-y-8">
@@ -40,33 +39,23 @@ export default function ReturnToYourselfPage() {
             className="text-lg leading-relaxed"
             style={{ color: "rgba(255,255,255,0.7)" }}
           >
-            Більшість людей живуть за сценаріями, які колись прийняли за свої.
+            Застосування Методу можна масштабувати відповідно до цілей.
           </p>
 
           <p
             className="text-lg leading-relaxed"
             style={{ color: "rgba(255,255,255,0.7)" }}
           >
-            Освіта.
-            Кар'єра.
-            Соціальні ролі.
-            Очікування інших людей.
+            На цьому етапі доступний супровід Alex Logos Consulting для фіналізації задуму клієнта.
           </p>
 
+         
           <p
             className="text-lg leading-relaxed"
             style={{ color: "rgba(255,255,255,0.7)" }}
           >
-            З часом стає дедалі складніше зрозуміти,
-            де власні бажання, а де нав'язані.
-          </p>
-
-          <p
-            className="text-lg leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.7)" }}
-          >
-            Саме тому перша фаза Методу присвячена
-            поверненню контакту із собою.
+            П'ята фаза Методу присвячена
+            переведенню теорії у практику.
           </p>
         </div>
 
@@ -81,18 +70,16 @@ export default function ReturnToYourselfPage() {
             className="text-3xl font-semibold mb-8"
             style={{ color: "#c9a84c" }}
           >
-            Що відбувається на цій фазі
+            Над чим ми працюємо у цій фазі:
           </h2>
 
           <ul
             className="space-y-4 text-lg"
             style={{ color: "rgba(255,255,255,0.7)" }}
           >
-            <li>✓ Аналіз особистої історії</li>
-            <li>✓ Виявлення сильних сторін</li>
-            <li>✓ Дослідження життєвих сценаріїв</li>
-            <li>✓ LES AION Dossier</li>
-            <li>✓ Формування глибшого розуміння себе</li>
+            <li>✓ ALC консалтинг для клієнта</li>
+            <li>✓ Супровід у реалізації проекту</li>
+            
           </ul>
         </div>
 
@@ -114,8 +101,7 @@ export default function ReturnToYourselfPage() {
             className="text-xl leading-relaxed"
             style={{ color: "rgba(255,255,255,0.8)" }}
           >
-            Повернення контакту зі своїми справжніми цінностями,
-            бажаннями та природою.
+           Практичний результат сформованої ясної цілі клієнта.
           </p>
         </div>
 

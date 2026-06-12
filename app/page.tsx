@@ -170,72 +170,56 @@ export default function Home() {
 
 
 <section className="max-w-6xl mx-auto px-8 py-24">
-  <div className="grid lg:grid-cols-2 gap-16 items-center">
-    <p
-      className="text-sm uppercase tracking-[0.3em] mb-4"
-      style={{ color: "rgba(201,168,76,0.7)" }}
-    >
-      Автор Методу
-    </p>
+  <p
+    className="text-sm uppercase tracking-[0.3em] mb-4"
+    style={{ color: "rgba(201,168,76,0.7)" }}
+  >
+    Автор Методу
+  </p>
 
-    <h2
-      className="text-6xl md:text-4xl font-bold mb-10"
-      style={{ color: "#c9a84c" }}
-    >
-      Лес Шипка 
-    </h2>
+  <h2
+    className="text-4xl md:text-6xl font-bold mb-12"
+    style={{ color: "#c9a84c" }}
+  >
+    Лес Шипка
+  </h2>
 
-<Image
-  src="/les-alc.png"
-  alt="Лес Шипка"
-  width={900}
-  height={500}
-  className="rounded-3xl border w-full max-h-[520px] object-cover object-center"
-  style={{
-    borderColor: "rgba(201,168,76,0.15)",
-  }}
-/>
-<a
-  href="https://alexlogos.consulting"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="block"
-  style={{ color: "rgba(255,255,255,0.85)" }}
->
-  ✓ Alex Logos Consulting →
-</a>
+  <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <Image
+        src="/les-alc.png"
+        alt="Лес Шипка"
+        width={900}
+        height={500}
+        className="rounded-3xl border w-full max-h-[520px] object-cover object-center"
+        style={{ borderColor: "rgba(201,168,76,0.15)" }}
+      />
 
-    <p
-      className="text-xl leading-relaxed mt-8"
-      style={{ color: "rgba(255,255,255,0.78)" }}
-    >
-      Метод LES AION народився у реальному житті у пошуках відповіді на просте питання:
-    </p>
+      <a
+        href="https://alexlogos.consulting"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block mt-6"
+        style={{ color: "#c9a84c" }}
+      >
+        Alex Logos Consulting →
+      </a>
+    </div>
 
-   
-  </div>
+    <div className="space-y-8">
+      <p className="text-xl leading-relaxed" style={{ color: "rgba(255,255,255,0.78)" }}>
+        Метод LES AION народився у реальному житті у пошуках відповіді на просте питання:
+      </p>
 
-  
-  <div className="space-y-8 max-w-4xl">
-    
+      <p className="text-3xl md:text-4xl font-semibold" style={{ color: "#c9a84c" }}>
+        хто я насправді?
+      </p>
 
-    <p
-      className="text-3xl md:text-4xl font-semibold"
-      style={{ color: "#c9a84c" }}
-    >
-      хто я насправді?
-    </p>
-
-    <p
-      className="text-lg leading-relaxed"
-      style={{ color: "rgba(255,255,255,0.7)" }}
-    >
-      Крок за кроком Лес знайомився з собою.
-      Формував ясність.
-      Генерував інтерес.
-      Вчився співпрацювати зі штучним інтелектом.
-      Будував нову систему життя та роботи.
-    </p>
+      <p className="text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
+        Крок за кроком Лес знайомився з собою. Формував ясність. Генерував інтерес.
+        Вчився співпрацювати зі штучним інтелектом. Будував нову систему життя та роботи.
+      </p>
+    </div>
   </div>
 
   <div
@@ -245,52 +229,48 @@ export default function Home() {
       background: "rgba(255,255,255,0.02)",
     }}
   >
-    <h3
-      className="text-2xl font-semibold mb-8"
-      style={{ color: "#c9a84c" }}
-    >
+    <h3 className="text-2xl font-semibold mb-8" style={{ color: "#c9a84c" }}>
       Результатом стали
     </h3>
 
     <div className="grid md:grid-cols-2 gap-6">
       {[
-        <a
-  href="https://alexlogos.consulting"
-  target="_blank"
-  rel="noopener noreferrer"
-  style={{ color: "rgba(255,255,255,0.85)" }}
->
-  Alex Logos Consulting →
-</a>,
         "Метод LES AION",
         "Книга «Повернення до Себе»",
-        
-      ].map((item, index) => (
-  <div
-    key={typeof item === "string" ? item : index}
+        "Alex Logos Consulting",
+      ].map((item) => (
+        <div
+          key={item}
           className="rounded-2xl p-6 border"
           style={{
             borderColor: "rgba(201,168,76,0.12)",
             background: "rgba(255,255,255,0.01)",
           }}
         >
-          <p
-            className="text-lg"
-            style={{ color: "rgba(255,255,255,0.8)" }}
-          >
-            ✓ {item}
-          </p>
+          {item === "Alex Logos Consulting" ? (
+            <a
+              href="https://alexlogos.consulting"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-lg"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+            >
+              ✓ Alex Logos Consulting →
+            </a>
+          ) : (
+            <p className="text-lg" style={{ color: "rgba(255,255,255,0.8)" }}>
+              ✓ {item}
+            </p>
+          )}
         </div>
       ))}
     </div>
   </div>
 
   <div className="mt-16 max-w-4xl">
-    <p
-      className="text-2xl md:text-3xl leading-relaxed"
-      style={{ color: "#c9a84c" }}
-    >
-      Метод LES AION - це шлях людини, яка сама пройшла через кризу, пошук і трансформацію та вирішила поділитись досвідом з іншими.
+    <p className="text-2xl md:text-3xl leading-relaxed" style={{ color: "#c9a84c" }}>
+      Метод LES AION — це шлях людини, яка сама пройшла через кризу, пошук і
+      трансформацію та вирішила поділитись досвідом з іншими.
     </p>
   </div>
 </section>

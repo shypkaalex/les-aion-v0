@@ -265,9 +265,9 @@ export default function Home() {
         "Метод LES AION",
         "Книга «Повернення до Себе»",
         
-      ].map((item) => (
-        <div
-          key={item}
+      ].map((item, index) => (
+  <div
+    key={typeof item === "string" ? item : index}
           className="rounded-2xl p-6 border"
           style={{
             borderColor: "rgba(201,168,76,0.12)",

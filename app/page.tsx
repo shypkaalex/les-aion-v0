@@ -7,7 +7,7 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full" style={{background: 'radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%)'}} />
       </div>
-      <section id="method" className="relative max-w-3xl mx-auto px-8 py-24">
+      <section id="hero" className="relative max-w-4xl mx-auto px-8 py-24">
 
 
   <p
@@ -59,11 +59,11 @@ export default function Home() {
 >
   Розпочати шлях →
 </a>
-</section>n
+</section>
 
 <section
   id="method"
-  className="max-w-6xl mx-auto px-8 py-32"
+  className="max-w-6xl mx-auto px-8 py-24"
 >
   <div className="text-center mb-20">
     <p
@@ -169,8 +169,8 @@ export default function Home() {
 
 
 
-<section className="max-w-6xl mx-auto px-8 py-32">
-  <div className="max-w-4xl">
+<section className="max-w-6xl mx-auto px-8 py-24">
+  <div className="grid lg:grid-cols-2 gap-16 items-center">
     <p
       className="text-sm uppercase tracking-[0.3em] mb-4"
       style={{ color: "rgba(201,168,76,0.7)" }}
@@ -179,14 +179,34 @@ export default function Home() {
     </p>
 
     <h2
-      className="text-4xl md:text-6xl font-bold mb-10"
+      className="text-6xl md:text-4xl font-bold mb-10"
       style={{ color: "#c9a84c" }}
     >
       Лес Шипка 
     </h2>
 
+<Image
+  src="/les-alc.png"
+  alt="Лес Шипка"
+  width={900}
+  height={500}
+  className="rounded-3xl border w-full max-h-[520px] object-cover object-center"
+  style={{
+    borderColor: "rgba(201,168,76,0.15)",
+  }}
+/>
+<a
+  href="https://alexlogos.consulting"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="block"
+  style={{ color: "rgba(255,255,255,0.85)" }}
+>
+  ✓ Alex Logos Consulting →
+</a>
+
     <p
-      className="text-xl leading-relaxed mb-8"
+      className="text-xl leading-relaxed mt-8"
       style={{ color: "rgba(255,255,255,0.78)" }}
     >
       Метод LES AION народився у реальному житті у пошуках відповіді на просте питання:
@@ -234,9 +254,17 @@ export default function Home() {
 
     <div className="grid md:grid-cols-2 gap-6">
       {[
+        <a
+  href="https://alexlogos.consulting"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{ color: "rgba(255,255,255,0.85)" }}
+>
+  Alex Logos Consulting →
+</a>,
         "Метод LES AION",
         "Книга «Повернення до Себе»",
-        "Alex Logos Consulting",
+        
       ].map((item) => (
         <div
           key={item}

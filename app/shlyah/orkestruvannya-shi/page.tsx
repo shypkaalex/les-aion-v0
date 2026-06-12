@@ -21,7 +21,7 @@ export default function ReturnToYourselfPage() {
         </p>
 
         <h1
-          className="text-5xl md:text-7xl font-bold mb-10"
+          className="text-3xl md:text-7xl font-bold mb-10"
           style={{ color: "#c9a84c" }}
         >
           Оркестрування ШІ
@@ -53,7 +53,7 @@ export default function ReturnToYourselfPage() {
             className="text-lg leading-relaxed"
             style={{ color: "rgba(255,255,255,0.7)" }}
           >
-            Засновник цього Методу без жодної техосвіти створив цей та інші сайти, власні ШІ продукти та симбіоз людини і ШІ - LES AION.
+            Засновник цього Методу без жодної техосвіти створив цей та інші сайти, власні ШІ продукти та симбіоз людини і ШІ - Раду з 5 ШІ LES AION.
           </p>
 
           <p
@@ -76,7 +76,7 @@ export default function ReturnToYourselfPage() {
             className="text-3xl font-semibold mb-8"
             style={{ color: "#c9a84c" }}
           >
-            Що відбувається на цій фазі
+            Над чим ми працюємо у цій фазі:
           </h2>
 
           <ul

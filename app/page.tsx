@@ -18,7 +18,7 @@ export default function Home() {
   </p>
 
   <h1
-    className="text-5xl md:text-7xl font-bold tracking-[0.08em] mb-6"
+    className="text-3xl md:text-7xl font-bold tracking-[0.08em] mb-6"
     style={{ color: "#c9a84c" }}
   >
     Повернення до Себе
@@ -84,7 +84,7 @@ export default function Home() {
       className="max-w-3xl mx-auto text-lg leading-relaxed"
       style={{ color: "rgba(255,255,255,0.65)" }}
     >
-      Від хаосу до результату.
+      Від хаосу до результату
     </p>
   </div>
 
@@ -117,7 +117,7 @@ export default function Home() {
       {
         number: "05",
         title: "Результат",
-        text: "Отримання реальних результів у житті.",
+        text: "Отримання реальних результатів у житті.",
         link: "/shlyah/povernennya-do-sebe",
       },
     ].map((phase) => (

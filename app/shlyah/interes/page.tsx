@@ -71,7 +71,7 @@ export default function ReturnToYourselfPage() {
             className="text-3xl font-semibold mb-8"
             style={{ color: "#c9a84c" }}
           >
-            Що відбувається на цій фазі
+            Над чим ми працюємо у цій фазі:
           </h2>
 
           <ul

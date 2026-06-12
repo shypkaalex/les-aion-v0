@@ -21,7 +21,7 @@ export default function ReturnToYourselfPage() {
         </p>
 
         <h1
-          className="text-5xl md:text-7xl font-bold mb-10"
+          className="text-3xl md:text-7xl font-bold mb-10"
           style={{ color: "#c9a84c" }}
         >
           Інтерес

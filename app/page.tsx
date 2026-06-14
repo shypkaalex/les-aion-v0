@@ -293,6 +293,29 @@ export default function Home() {
   >
     Повернення до Себе · Ясність · Інтерес · ШІ · Результат
   </p>
+
+<footer className="py-12">
+  <div className="mx-auto mb-6 h-px w-32 bg-amber-300/40" />
+
+  <div className="text-center text-sm tracking-[0.3em] text-amber-300">
+    <a href="https://lesshypka.com" target="_blank" rel="noopener noreferrer">
+      ORIGIN
+    </a>
+
+    <span className="mx-4">•</span>
+
+    <a href="https://alexlogos.consulting" target="_blank" rel="noopener noreferrer">
+      ACTION
+    </a>
+
+    <span className="mx-4">•</span>
+
+    <a href="https://lesaion.world" target="_blank" rel="noopener noreferrer">
+      VISION
+    </a>
+  </div>
+</footer>
+
 </footer>
 
     </main>

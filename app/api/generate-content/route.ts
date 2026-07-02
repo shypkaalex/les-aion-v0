@@ -8,6 +8,15 @@ const openai = new OpenAI({
 });
 
 export async function POST(request: NextRequest) {
+      const expectedSecret = process.env.CONTENT_API_SECRET;
+  const providedSecret = request.headers.get("x-api-secret");
+
+  if (!expectedSecret || providedSecret !== expectedSecret) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   try {
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json(

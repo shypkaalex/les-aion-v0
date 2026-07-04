@@ -42,7 +42,10 @@ export async function POST(request) {
   }
 
   const accessToken =
-    process.env.TIKTOK_ACCESS_TOKEN?.trim();
+  request.headers
+    .get("x-tiktok-access-token")
+    ?.trim() ||
+  process.env.TIKTOK_ACCESS_TOKEN?.trim();
 
   if (!accessToken) {
     return jsonResponse(

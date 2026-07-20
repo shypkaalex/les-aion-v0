@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVyFfHAfuoBsozvIeI8_v-4UfAFbJS-qBpp7g7ICgQfsF6Mwv-czvt5bxZhwmjcMtPTQ/exec";
 
 export async function GET() {
-  const scriptUrl = process.env.LES_AION_GOOGLE_SCRIPT_URL || DEFAULT_SCRIPT_URL;
+  const scriptUrl = DEFAULT_SCRIPT_URL;
   const secret = process.env.LES_AION_BOOKING_SECRET;
   const fallbackUrl = process.env.LES_AION_BOOKING_URL || "https://forms.gle/CtPXnQefCSi7RWHX6";
 

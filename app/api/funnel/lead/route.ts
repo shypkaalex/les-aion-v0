@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       submittedAt,
     };
 
-    const webhookUrl = process.env.LES_AION_LEAD_WEBHOOK_URL || process.env.LES_AION_GOOGLE_SCRIPT_URL || DEFAULT_SCRIPT_URL;
+    const webhookUrl = process.env.LES_AION_LEAD_WEBHOOK_URL || DEFAULT_SCRIPT_URL;
     if (webhookUrl) {
       const webhookResponse = await fetch(webhookUrl, {
         method: "POST",

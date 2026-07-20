@@ -4,7 +4,7 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVyFfHAfuoBsozvIeI8_v-4UfAFbJS-qBpp7g7ICgQfsF6Mwv-czvt5bxZhwmjcMtPTQ/exec";
 
 export async function POST(request: Request) {
-  const scriptUrl = process.env.LES_AION_GOOGLE_SCRIPT_URL || DEFAULT_SCRIPT_URL;
+  const scriptUrl = DEFAULT_SCRIPT_URL;
   const secret = process.env.LES_AION_BOOKING_SECRET;
   try {
     const body = await request.json();

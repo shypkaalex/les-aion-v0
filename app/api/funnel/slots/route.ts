@@ -13,7 +13,7 @@ export async function GET() {
     const url = new URL(scriptUrl);
     url.searchParams.set("action", "slots");
     if (secret) url.searchParams.set("secret", secret);
-    const response = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(8000) });
+    const response = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(30000) });
     if (!response.ok) throw new Error(`Google booking service returned ${response.status}`);
     const data = await response.json();
     return NextResponse.json({ slots: data.slots || [], fallbackUrl, configured: true });

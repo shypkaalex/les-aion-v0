@@ -3,10 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(request: NextRequest) {
       const expectedSecret = process.env.CONTENT_API_SECRET;
   const providedSecret = request.headers.get("x-api-secret");
@@ -24,6 +20,7 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     const body = await request.json();
 

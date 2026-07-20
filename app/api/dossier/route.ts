@@ -7,8 +7,6 @@ import {
 } from "@/lib/les-aion/factoryEngine";
 import { buildMirror } from "@/lib/les-aion/mirrorEngine";
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 
 function getWesternSign(dateString: string) {
@@ -310,6 +308,10 @@ function getSlavicSign(dateString: string) {
 }
 
 export async function POST(req: NextRequest) {
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json({ error: "OPENAI_API_KEY не налаштовано" }, { status: 503 });
+  }
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   try {
     const body = await req.json();
 

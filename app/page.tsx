@@ -1,323 +1,204 @@
 import Image from "next/image";
 import Link from "next/link";
+import TransitionMirror from "@/components/funnel/transition-mirror";
+
+const phases = [
+  {
+    number: "01",
+    title: "Побачити свою основу",
+    text: "Відокремити власні сильні сторони, досвід і внутрішні опори від ролей, які вже перестали працювати.",
+    result: "Персональне досьє",
+    href: "/shlyah/povernennya-do-sebe",
+  },
+  {
+    number: "02",
+    title: "Обрати напрям",
+    text: "Зібрати розрізнені бажання й можливості в одну зрозумілу ціль наступного етапу.",
+    result: "Ясна ціль",
+    href: "/shlyah/yasnist",
+  },
+  {
+    number: "03",
+    title: "Знайти живий інтерес",
+    text: "Визначити, що дає енергію рухатися без постійного примусу й боротьби із собою.",
+    result: "Внутрішнє паливо",
+    href: "/shlyah/interes",
+  },
+  {
+    number: "04",
+    title: "Створити ШІ-команду",
+    text: "Підібрати цифрових помічників під вашу ціль, досвід і звичний спосіб мислення.",
+    result: "Персональний ШІ-оркестр",
+    href: "/shlyah/orkestruvannya-shi",
+  },
+  {
+    number: "05",
+    title: "Довести до результату",
+    text: "Перетворити задум на конкретний продукт, практику, книгу, систему або інший вимірюваний результат.",
+    result: "Реалізований задум",
+    href: "/shlyah/rezultat",
+  },
+];
+
+const situations = [
+  "Старий професійний шлях більше не відчувається моїм",
+  "Після переїзду я не хочу починати життя з нуля",
+  "У мене багато досвіду, але я не бачу його нової форми",
+  "Є кілька сильних ідей, але немає одного фокусу",
+  "Я хочу використати ШІ для власного задуму, а не заради ШІ",
+  "Я відчуваю готовність до нового етапу, але не знаю першого кроку",
+];
 
 export default function Home() {
   return (
-    <main className="bg-[#08111f] text-white overflow-hidden">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full" style={{background: 'radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%)'}} />
-      </div>
-      <section id="hero" className="relative max-w-4xl mx-auto px-8 py-24">
+    <main>
+      <header className="site-header">
+        <Link href="#top" className="brand" aria-label="LES AION — на початок">
+          LES AION
+        </Link>
+        <nav aria-label="Головна навігація">
+          <Link href="#for-whom">Для кого</Link>
+          <Link href="#method">Метод</Link>
+          <Link href="#author">Автор</Link>
+          <Link href="#mirror" className="nav-cta">Почати</Link>
+        </nav>
+      </header>
 
-
-  <p
-    className="text-xs tracking-[0.35em] uppercase mb-4"
-    style={{ color: "rgba(201,168,76,0.75)" }}
-  >
-    Метод LES AION
-  </p>
-
-  <h1
-    className="text-3xl md:text-7xl font-bold tracking-[0.08em] mb-6"
-    style={{ color: "#c9a84c" }}
-  >
-    Повернення до Себе
-  </h1>
-
-  <p
-    className="text-xl md:text-2xl leading-relaxed mb-5 max-w-3xl"
-    style={{ color: "rgba(255,255,255,0.78)" }}
-  >
-    Головний навик людини в епоху штучного інтелекту
-  </p>
-
-  <div
-    className="w-24 h-px mb-6"
-    style={{
-      background:
-        "linear-gradient(to right, transparent, rgba(201,168,76,0.7), transparent)",
-    }}
-  />
-
-  <p
-    className="text-base md:text-lg leading-relaxed mb-10 max-w-2xl"
-    style={{ color: "rgba(255,255,255,0.58)" }}
-  >
-    П’ятифазний Шлях, який допомагає зрозуміти вроджені та набуті таланти, сформувати ясність щодо власних цілей, трансформувати хаотичні бажання в інтерес, навчитись деригувати власною командою ШІ та отримати бажаний реальний
-    результат у житті.
-  </p>
-
-  <a
-  href="https://forms.gle/CtPXnQefCSi7RWHX6"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="rounded-full px-8 py-4 text-xs tracking-[0.2em] uppercase transition-all duration-300 hover:bg-amber-400/10 hover:text-white"
-  style={{
-    border: "1px solid rgba(201,168,76,0.6)",
-    color: "#c9a84c",
-  }}
->
-  Розпочати шлях →
-</a>
-</section>
-
-<section
-  id="method"
-  className="max-w-6xl mx-auto px-8 py-24"
->
-  <div className="text-center mb-20">
-    <p
-      className="text-sm uppercase tracking-[0.3em] mb-4"
-      style={{ color: "rgba(201,168,76,0.7)" }}
-    >
-      Метод LES AION
-    </p>
-
-    <h2
-      className="text-4xl md:text-6xl font-bold mb-6"
-      style={{ color: "#c9a84c" }}
-    >
-      П'ять фаз Методу
-    </h2>
-
-    <p
-      className="max-w-3xl mx-auto text-lg leading-relaxed"
-      style={{ color: "rgba(255,255,255,0.65)" }}
-    >
-      Від хаосу до результату
-    </p>
-  </div>
-
-  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {[
-      {
-        number: "01",
-        title: "Знайомство з Собою",
-        text: "Індивідуальність + Особистість",
-        link: "/shlyah/povernennya-do-sebe",
-      },
-      {
-        number: "02",
-        title: "Ясність",
-        text: "Наведення фокусу.",
-        link: "/shlyah/povernennya-do-sebe",
-      },
-      {
-        number: "03",
-        title: "Інтерес",
-        text: "Генерація внутрішнього палива-мотивації.",
-        link: "/shlyah/povernennya-do-sebe",
-      },
-      {
-        number: "04",
-        title: "Оркестрування ШІ",
-        text: "Створення власної ШІ-команди",
-        link: "/shlyah/povernennya-do-sebe",
-      },
-      {
-        number: "05",
-        title: "Результат",
-        text: "Отримання реальних результатів у житті.",
-        link: "/shlyah/povernennya-do-sebe",
-      },
-    ].map((phase) => (
-  <Link
-    key={phase.number}
-    href={phase.link}
-  >
-    <div
-      className="rounded-3xl p-6 border h-full transition-all duration-300 hover:-translate-y-1"
-      style={{
-        borderColor: "rgba(201,168,76,0.15)",
-        background: "rgba(255,255,255,0.02)",
-      }}
-    >
-        <div
-          className="text-sm mb-4"
-          style={{ color: "#c9a84c" }}
-        >
-          {phase.number}
+      <section id="top" className="hero section-shell">
+        <div className="hero-copy">
+          <p className="eyebrow">Метод LES AION · Повернення до Себе</p>
+          <h1>Не починайте наступний етап <em>із нуля.</em></h1>
+          <p className="hero-lead">
+            Зберіть свій досвід, здібності та ідеї в один власний напрям.
+            Створіть персональну команду ШІ й доведіть задум до реального результату.
+          </p>
+          <div className="hero-actions">
+            <Link href="#mirror" className="button button-primary">Побачити мою точку переходу</Link>
+            <Link href="#method" className="text-link">Як працює Метод <span>↓</span></Link>
+          </div>
+          <p className="microcopy">Без діагнозів і готових ярликів · 7–10 хвилин · українською</p>
         </div>
+        <aside className="hero-aside">
+          <p>LES AION працює з моментом, коли</p>
+          <blockquote>«Я знаю, що здатен на більше, але не бачу, куди спрямувати свій досвід».</blockquote>
+          <div className="route-line" aria-hidden="true" />
+          <ul>
+            <li>внутрішня опора</li>
+            <li>ясний напрям</li>
+            <li>ШІ-команда</li>
+            <li>реальний результат</li>
+          </ul>
+        </aside>
+      </section>
 
-        <h3
-          className="text-xl font-semibold mb-4"
-          style={{ color: "#c9a84c" }}
-        >
-          {phase.title}
-        </h3>
-
-        <p
-  className="text-sm leading-relaxed"
-  style={{ color: "rgba(255,255,255,0.65)" }}
->
-  {phase.text}
-</p>
-
-<p
-  className="mt-6 text-sm"
-  style={{ color: "#c9a84c" }}
->
-  Детальніше →
-</p>
-
-</div>
-</Link>
-))
-}
-  </div>
-</section>
-
-
-
-<section className="max-w-6xl mx-auto px-8 py-24">
-  <p
-    className="text-sm uppercase tracking-[0.3em] mb-4"
-    style={{ color: "rgba(201,168,76,0.7)" }}
-  >
-    Автор Методу
-  </p>
-
-  <h2
-    className="text-4xl md:text-6xl font-bold mb-12"
-    style={{ color: "#c9a84c" }}
-  >
-    Лес Шипка
-  </h2>
-
-  <div className="grid lg:grid-cols-2 gap-12 items-center">
-    <div>
-      <Image
-        src="/les-alc.png"
-        alt="Лес Шипка"
-        width={900}
-        height={500}
-        className="rounded-3xl border w-full max-h-[520px] object-cover object-center"
-        style={{ borderColor: "rgba(201,168,76,0.15)" }}
-      />
-
-      <a
-        href="https://alexlogos.consulting"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-block mt-6"
-        style={{ color: "#c9a84c" }}
-      >
-        Alex Logos Consulting →
-      </a>
-    </div>
-
-    <div className="space-y-8">
-      <p className="text-xl leading-relaxed" style={{ color: "rgba(255,255,255,0.78)" }}>
-        Метод LES AION народився у реальному житті у пошуках відповіді на просте питання:
-      </p>
-
-      <p className="text-3xl md:text-4xl font-semibold" style={{ color: "#c9a84c" }}>
-        хто я насправді?
-      </p>
-
-      <p className="text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
-        Крок за кроком Лес знайомився з собою. Формував ясність. Генерував інтерес.
-        Вчився співпрацювати зі штучним інтелектом. Будував нову систему життя та роботи.
-      </p>
-    </div>
-  </div>
-
-  <div
-    className="mt-16 rounded-3xl p-10 border"
-    style={{
-      borderColor: "rgba(201,168,76,0.15)",
-      background: "rgba(255,255,255,0.02)",
-    }}
-  >
-    <h3 className="text-2xl font-semibold mb-8" style={{ color: "#c9a84c" }}>
-      Результатом стали
-    </h3>
-
-    <div className="grid md:grid-cols-2 gap-6">
-      {[
-        "Метод LES AION",
-        "Книга «Повернення до Себе»",
-        "Alex Logos Consulting",
-      ].map((item) => (
-        <div
-          key={item}
-          className="rounded-2xl p-6 border"
-          style={{
-            borderColor: "rgba(201,168,76,0.12)",
-            background: "rgba(255,255,255,0.01)",
-          }}
-        >
-          {item === "Alex Logos Consulting" ? (
-            <a
-              href="https://alexlogos.consulting"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-lg"
-              style={{ color: "rgba(255,255,255,0.85)" }}
-            >
-              ✓ Alex Logos Consulting →
-            </a>
-          ) : (
-            <p className="text-lg" style={{ color: "rgba(255,255,255,0.8)" }}>
-              ✓ {item}
-            </p>
-          )}
+      <section id="for-whom" className="section-shell section-block">
+        <div className="section-heading split-heading">
+          <div>
+            <p className="eyebrow">Можливо, ви зараз тут</p>
+            <h2>Старий шлях уже змінився.<br />Новий ще не став ясним.</h2>
+          </div>
+          <p>
+            LES AION створений для досвідчених людей у професійному або життєвому переході —
+            в Україні й за кордоном.
+          </p>
         </div>
-      ))}
-    </div>
-  </div>
+        <div className="situation-grid">
+          {situations.map((situation, index) => (
+            <article key={situation}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <p>{situation}</p>
+            </article>
+          ))}
+        </div>
+        <div className="recognition-strip">
+          <strong>Вам не бракує досвіду.</strong>
+          <p>Можливо, йому потрібні новий фокус, нова форма і правильні інструменти.</p>
+          <Link href="#mirror" className="text-link">Перевірити мою ситуацію →</Link>
+        </div>
+      </section>
 
-  <div className="mt-16 max-w-4xl">
-    <p className="text-2xl md:text-3xl leading-relaxed" style={{ color: "#c9a84c" }}>
-      Метод LES AION — це шлях людини, яка сама пройшла через кризу, пошук і
-      трансформацію та вирішила поділитись досвідом з іншими.
-    </p>
-  </div>
-</section>
+      <section id="method" className="method-section section-block">
+        <div className="section-shell">
+          <div className="section-heading centered-heading">
+            <p className="eyebrow">Від невизначеності до дії</p>
+            <h2>П’ять фаз одного особистого маршруту</h2>
+            <p>Самопізнання тут не є кінцевою точкою. Воно стає основою для рішення, системи й результату.</p>
+          </div>
+          <div className="phase-list">
+            {phases.map((phase) => (
+              <Link href={phase.href} key={phase.number} className="phase-card">
+                <span className="phase-number">{phase.number}</span>
+                <div>
+                  <h3>{phase.title}</h3>
+                  <p>{phase.text}</p>
+                </div>
+                <strong>{phase.result}</strong>
+                <span className="phase-arrow">↗</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      <section className="ai-statement section-shell section-block">
+        <p className="eyebrow">Людина + ШІ</p>
+        <div>
+          <h2>ШІ не вирішує, ким вам бути.</h2>
+          <p>Спочатку ви визначаєте власний напрям. Потім технологія допомагає пройти шлях, для якого раніше могли знадобитися ціла команда, технічні навички й значний бюджет.</p>
+        </div>
+        <div className="ai-principles">
+          <span>Ви — автор</span>
+          <span>ШІ — команда</span>
+          <span>Результат — у реальному житті</span>
+        </div>
+      </section>
 
+      <section id="mirror" className="mirror-section section-block">
+        <div className="section-shell mirror-intro">
+          <div>
+            <p className="eyebrow">Перший крок</p>
+            <h2>Дзеркало переходу LES AION</h2>
+          </div>
+          <p>
+            Дайте відповіді на кілька запитань. Ви отримаєте коротке відображення своєї точки переходу,
+            головної опори, ризику розфокусу та наступного кроку. Це не тест і не діагноз.
+          </p>
+        </div>
+        <TransitionMirror />
+      </section>
 
-<footer className="border-t px-8 py-12 text-center"
-  style={{ borderColor: "rgba(201,168,76,0.12)" }}
->
-  <p
-    className="text-sm tracking-[0.3em] uppercase mb-4"
-    style={{ color: "#c9a84c" }}
-  >
-    LES AION
-  </p>
+      <section id="author" className="section-shell author-section section-block">
+        <div className="author-image-wrap">
+          <Image src="/les-alc.png" alt="Лес Шипка — автор Методу LES AION" width={900} height={600} className="author-image" />
+          <a href="https://alexlogos.consulting" target="_blank" rel="noreferrer" className="image-link">Alex Logos Consulting ↗</a>
+        </div>
+        <div className="author-copy">
+          <p className="eyebrow">Автор Методу · Лес Шипка</p>
+          <h2>Цей шлях народився не з теорії.</h2>
+          <p className="author-lead">Він почався з особистої кризи й простого запитання: «хто я насправді?»</p>
+          <p>Крок за кроком Лес збирав себе, формував ясність, знаходив живий інтерес і вчився співпрацювати зі штучним інтелектом. Результатом стали Метод LES AION, книга «Повернення до Себе» та Alex Logos Consulting.</p>
+          <blockquote>«Я не скажу вам, ким бути. Я допоможу побачити, що у вас уже є, обрати власний напрям і зібрати інструменти для його реалізації».</blockquote>
+          <Link href="#mirror" className="button button-secondary">Почати з Дзеркала переходу</Link>
+        </div>
+      </section>
 
-  <p
-    className="text-sm"
-    style={{ color: "rgba(255,255,255,0.45)" }}
-  >
-    Повернення до Себе · Ясність · Інтерес · ШІ · Результат
-  </p>
+      <section className="final-cta section-shell">
+        <p className="eyebrow">Ваш наступний етап</p>
+        <h2>Не шукати ще одну чужу відповідь.<br /><em>Побачити власний напрям.</em></h2>
+        <Link href="#mirror" className="button button-primary">Розпочати з першого кроку</Link>
+      </section>
 
-<footer className="py-12">
-  <div className="mx-auto mb-6 h-px w-32 bg-amber-300/40" />
-
-  <div className="text-center text-sm tracking-[0.3em] text-amber-300">
-    <a href="https://lesshypka.com" target="_blank" rel="noopener noreferrer">
-      ORIGIN
-    </a>
-
-    <span className="mx-4">•</span>
-
-    <a href="https://alexlogos.consulting" target="_blank" rel="noopener noreferrer">
-      ACTION
-    </a>
-
-    <span className="mx-4">•</span>
-
-    <a href="https://lesaion.world" target="_blank" rel="noopener noreferrer">
-      VISION
-    </a>
-  </div>
-</footer>
-
-</footer>
-
+      <footer className="site-footer">
+        <div>
+          <strong>LES AION</strong>
+          <p>Повернення до Себе · Ясність · Інтерес · ШІ · Результат</p>
+        </div>
+        <div className="footer-links">
+          <Link href="/privacy">Конфіденційність</Link>
+          <Link href="/terms">Умови</Link>
+          <a href="https://alexlogos.consulting" target="_blank" rel="noreferrer">Alex Logos Consulting</a>
+        </div>
+      </footer>
     </main>
   );
 }

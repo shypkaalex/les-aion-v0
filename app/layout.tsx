@@ -1,37 +1,29 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "LES AION",
-  description: "Operating System of Clarity",
+  metadataBase: new URL("https://lesaion.world"),
+  title: "Метод LES AION — не починайте наступний етап із нуля",
+  description: "Авторський п’ятифазний метод для досвідчених людей у моменті переходу: від внутрішньої опори й ясного напряму до персональної ШІ-команди та реального результату.",
+  openGraph: {
+    title: "Метод LES AION — ваш наступний етап",
+    description: "Зберіть досвід, здібності та ідеї в один власний напрям і доведіть задум до результату за допомогою персональної команди ШІ.",
+    type: "website",
+    locale: "uk_UA",
+    siteName: "LES AION",
+  },
+  alternates: { canonical: "/" },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html
-      lang="uk"
-      className={`${geistSans.variable} ${geistMono.variable} dark`}
-    >
-      <head>
-        <meta name="theme-color" content="#020617" />
-      </head>
+export const viewport: Viewport = {
+  themeColor: "#07111f",
+  colorScheme: "dark",
+};
 
-      <body className="min-h-full flex flex-col">{children}</body>
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="uk">
+      <body>{children}</body>
     </html>
   );
 }

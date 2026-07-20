@@ -1,86 +1,22 @@
+import Link from "next/link";
+
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-[#08111f] px-6 py-16 text-white">
-      <article className="mx-auto max-w-3xl">
-        <h1 className="mb-8 text-4xl font-semibold text-[#c9a84c]">
-          Terms of Service
-        </h1>
-
-        <p className="mb-6 text-sm text-white/60">
-          Last updated: July 3, 2026
-        </p>
-
-        <div className="space-y-6 leading-7 text-white/85">
-          <p>
-            These Terms of Service govern your use of the ALC Neuro Lab
-            Publisher and related services operated through lesaion.world.
-          </p>
-
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-white">
-              1. Service
-            </h2>
-            <p>
-              The service helps authorized users create, manage, and publish
-              educational short-form content to supported social media
-              platforms.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-white">
-              2. Authorized use
-            </h2>
-            <p>
-              Users may only connect accounts they own or are authorized to
-              manage. The service must not be used to publish unlawful,
-              misleading, infringing, or harmful content.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-white">
-              3. Third-party platforms
-            </h2>
-            <p>
-              Publishing features depend on third-party platforms, including
-              TikTok. Their own terms, policies, availability, and technical
-              limits also apply.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-white">
-              4. Availability
-            </h2>
-            <p>
-              The service may be modified, paused, or discontinued when
-              required for maintenance, security, platform compliance, or
-              technical reasons.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-white">
-              5. Disclaimer
-            </h2>
-            <p>
-              Content produced through the service is provided for educational
-              and informational purposes. Users remain responsible for
-              reviewing and approving content before publication.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-white">
-              6. Contact
-            </h2>
-            <p>
-              Questions regarding these terms may be submitted through the
-              official contact details published on lesaion.world.
-            </p>
-          </section>
-        </div>
+    <main className="legal-page">
+      <article>
+        <Link href="/" className="legal-back">← LES AION</Link>
+        <p className="eyebrow">Умови користування</p>
+        <h1>Рамка роботи LES AION</h1>
+        <p className="legal-date">Оновлено 20 липня 2026 року</p>
+        <p>Ці умови регулюють використання lesaion.world, «Дзеркала переходу», матеріалів Методу та пов’язаних цифрових сервісів.</p>
+        <section><h2>1. Призначення сервісу</h2><p>LES AION допомагає людині дослідити свою точку переходу, сформувати ясність, підготуватися до живої розмови та, за окремою домовленістю, пройти персональний маршрут до практичного результату.</p></section>
+        <section><h2>2. Не медична послуга</h2><p>Матеріали, автоматичні результати й консультаційні розмови не є медичною, психіатричною або психотерапевтичною допомогою і не замінюють звернення до відповідного кваліфікованого фахівця.</p></section>
+        <section><h2>3. Відповідальність людини</h2><p>Користувач самостійно оцінює запропоновані гіпотези та приймає рішення. LES AION не гарантує конкретного життєвого, кар’єрного або фінансового результату, оскільки він залежить від дій, обставин і рішень самої людини.</p></section>
+        <section><h2>4. Точність інформації</h2><p>Для корисного результату користувач має надавати правдиву інформацію, не видавати себе за іншу особу й не надсилати незаконні, шкідливі або чужі конфіденційні дані.</p></section>
+        <section><h2>5. Інтелектуальна власність</h2><p>Назва, структура Методу, тексти, дизайн, програмні компоненти й матеріали LES AION захищені. Особистий результат можна використовувати для власних потреб, але не для перепродажу, копіювання Методу або створення похідної комерційної послуги без письмової згоди.</p></section>
+        <section><h2>6. Сторонні сервіси</h2><p>Запис, відеозустрічі, оплата, email та інші функції можуть залежати від сторонніх платформ, до яких також застосовуються їхні умови й політики.</p></section>
+        <section><h2>7. Зміни та доступність</h2><p>Сервіс може змінюватися, тимчасово призупинятися або оновлюватися з міркувань розвитку, технічної підтримки, безпеки чи відповідності вимогам платформ.</p></section>
+        <section><h2>8. Контакт</h2><p>Запитання щодо цих умов можна подати через офіційні контактні канали LES AION або Alex Logos Consulting.</p></section>
       </article>
     </main>
   );

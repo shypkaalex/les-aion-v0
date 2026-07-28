@@ -1,10 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import ContactButton from "@/components/contact-cta";
 
 const email = "les@alexlogos.consulting";
-const mailto = `mailto:${email}?subject=${encodeURIComponent("Стратегічна розмова LES AION")}&body=${encodeURIComponent(
-  "Вітаю, Лесе.\n\nХочу замовити стратегічну розмову щодо мого переходу.\n\nКоротко про мою ситуацію:\n\n"
-)}`;
 
 const realitySignals = [
   ["Знання застарівають швидше", "Те, що нещодавно було перевагою, стає базовою функцією або втрачає цінність."],
@@ -29,15 +27,6 @@ const faqs = [
   ["Що я отримаю?", "Повну персональну карту переходу у PDF: напрацьовані моделі, висновки, нову конфігурацію та практичний маршрут її реалізації."],
   ["Чому немає стандартної ціни?", "Кожен Adaptation Gap має власну структуру, а кожен перехід — різний масштаб, глибину й тривалість. Формат і ціна визначаються після особистої стратегічної розмови."],
 ];
-
-function ContactButton({ className = "" }: { className?: string }) {
-  return (
-    <a href={mailto} className={`cta-button ${className}`.trim()}>
-      Замовити стратегічну розмову
-      <span aria-hidden="true">↗</span>
-    </a>
-  );
-}
 
 function AdaptationGapDiagram() {
   return (

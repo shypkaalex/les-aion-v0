@@ -3,16 +3,24 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lesaion.world"),
-  title: "Метод LES AION — не починайте наступний етап із нуля",
-  description: "Авторський п’ятифазний метод для досвідчених людей у моменті переходу: від внутрішньої опори й ясного напряму до персональної ШІ-команди та реального результату.",
+  title: "LES AION — оператор переходів через Adaptation Gap",
+  description: "LES AION допомагає визначити Adaptation Gap, спроєктувати потрібну конфігурацію та пройти неминучий перехід раніше, на власних умовах і з меншою ціною зволікання.",
+  keywords: ["Adaptation Gap", "оператор переходів", "стратегічний консалтинг", "персональний перехід", "вартість часу", "LES AION"],
   openGraph: {
-    title: "Метод LES AION — ваш наступний етап",
-    description: "Зберіть досвід, здібності та ідеї в один власний напрям і доведіть задум до результату за допомогою персональної команди ШІ.",
+    title: "LES AION — перехід неминучий. Ціна очікування зростає.",
+    description: "Персонально спроєктований перехід від конфігурації минулого до конфігурації, потрібної майбутньому.",
     type: "website",
     locale: "uk_UA",
+    url: "https://lesaion.world/",
     siteName: "LES AION",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "LES AION — оператор переходів",
+    description: "Працюємо з Adaptation Gap і вартістю часу.",
+  },
   alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {

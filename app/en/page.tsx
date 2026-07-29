@@ -180,66 +180,59 @@ export default function EnglishHome() {
           <div className="cost-layout">
             <div className="cost-curve">
               <div className="curve-labels"><span>Cost of transition ↑</span><span>Chronos →</span></div>
-              <svg viewBox="0 0 720 360" role="img" aria-label="The cost of transition rises as a decision is delayed">
-                <path className="grid-line" d="M45 70H680M45 145H680M45 220H680M45 295H680" />
-                <path className="cost-area" d="M45 286 C220 279 380 250 500 180 C575 135 630 78 680 28 L680 295 L45 295 Z" />
-                <path className="cost-line" d="M45 286 C220 279 380 250 500 180 C575 135 630 78 680 28" />
-                <line className="decision-line" x1="475" y1="62" x2="475" y2="295" />
-                <circle className="decision-dot" cx="475" cy="196" r="6" />
-                <text x="490" y="82">DECISION</text>
+              <svg viewBox="0 0 660 390" role="img" aria-labelledby="cost-title-en cost-desc-en">
+                <title id="cost-title-en">The cost of transition rises over time</title>
+                <desc id="cost-desc-en">The curve moves from a timely decision through a delayed decision to a forced transition with less freedom of choice.</desc>
+                <path className="cost-grid" d="M50 55V335H625M50 265H625M50 195H625M50 125H625" />
+                <path className="curve-shadow" d="M55 315 C255 305 420 250 600 70" />
+                <path className="curve-main" d="M55 315 C255 305 420 250 600 70" />
+                <g className="curve-point"><circle cx="150" cy="304" r="7" /><text x="125" y="350">Today</text></g>
+                <g className="curve-point"><circle cx="375" cy="263" r="7" /><text x="350" y="350">Later</text></g>
+                <g className="curve-point forced"><circle cx="565" cy="105" r="7" /><text x="520" y="350">Forced</text></g>
               </svg>
+              <p>The later the transition begins, the more resources it may require — and the fewer decisions may remain available.</p>
             </div>
-            <div className="cost-factors">
-              <article><span>01</span><h3>Cost of Delay</h3><p>The accumulated price of every day the old configuration remains in place.</p></article>
-              <article><span>02</span><h3>Opportunity Cost</h3><p>The value of possibilities you were not ready to recognise or use.</p></article>
-              <article><span>03</span><h3>Cost of Inaction</h3><p>The future cost of a transition made under pressure rather than by choice.</p></article>
-            </div>
-          </div>
-          <div className="choice-line">
-            <div><small>Earlier</small><strong>More options.<br />More freedom.</strong></div>
-            <i aria-hidden="true" />
-            <div><small>Later</small><strong>Higher cost.<br />Fewer terms to choose.</strong></div>
-          </div>
-        </section>
-
-        <section id="transition" className="transition-section section-block">
-          <div className="section-shell">
-            <div className="section-heading split-heading">
-              <div>
-                <p className="eyebrow">What the client buys</p>
-                <h2>Not advice.<br />A personally designed transition.</h2>
-              </div>
-              <div>
-                <p>
-                  From the configuration built by your past to the configuration required by your
-                  future — with a clear route, decision logic and practical artefacts.
-                </p>
-                <ContactButton locale="en" />
-              </div>
-            </div>
-            <div className="transition-bridge">
-              <div><small>Where you are</small><strong>Current<br />configuration</strong><p>Experience, roles, capabilities, environment, criteria of value.</p></div>
-              <div className="bridge-span"><span>LES AION</span><i /><strong>Transition architecture</strong><i /></div>
-              <div><small>Where the future requires you</small><strong>New<br />configuration</strong><p>A coherent system designed for the emerging context.</p></div>
-            </div>
-            <div className="not-product">
-              <p>You are not buying</p>
-              <span>hours</span><span>a test</span><span>an automated report</span><span>generic recommendations</span><span>a standard package</span>
+            <div className="cost-list">
+              <article><span>01</span><div><h3>Cost of Delay</h3><p>The price of every day, month or year a decision is postponed.</p></div></article>
+              <article><span>02</span><div><h3>Opportunity Cost</h3><p>The value of opportunities that were available but could not be used.</p></div></article>
+              <article><span>03</span><div><h3>Cost of Inaction</h3><p>The total bill for preserving a configuration that no longer fits reality.</p></div></article>
             </div>
           </div>
         </section>
 
         <section className="inevitable section-block">
           <div className="section-shell">
-            <p className="eyebrow">The economics of the inevitable</p>
+            <p className="eyebrow">The inevitability of transition</p>
             <blockquote>
-              “Delay does not save the cost of transition. It transfers that cost into the future,
-              where it is paid with interest.”
+              “Inaction does not preserve the current state. It merely allows time and circumstances
+              to determine the future price instead of you.”
             </blockquote>
-            <p>
-              You are not choosing between paying and not paying. You are choosing between an earlier,
-              consciously designed transition and a later transition imposed by circumstances.
-            </p>
+            <div className="choice-line">
+              <div><small>Earlier</small><strong>Your own decision</strong><span>More options · lower cost · your terms</span></div>
+              <i aria-hidden="true" />
+              <div><small>Later</small><strong>A forced response</strong><span>Fewer options · higher cost · external pressure</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="transition" className="section-shell section-block transition-section">
+          <div className="section-heading split-heading">
+            <div>
+              <p className="eyebrow">The product is the transition</p>
+              <h2>Do not chase change. Transition earlier — on your own terms.</h2>
+            </div>
+            <div>
+              <p>
+                A LES AION client does not buy consulting hours, ready-made advice or an automated
+                report. The client invests in a personally designed transition.
+              </p>
+              <ContactButton locale="en" />
+            </div>
+          </div>
+          <div className="transition-bridge">
+            <div><small>From</small><strong>Current configuration</strong><span>Increasingly misaligned with reality</span></div>
+            <div className="bridge-span"><span>Intellectual partnership</span><i /><b>Transition</b><i /></div>
+            <div><small>To</small><strong>New configuration</strong><span>Ready to use emerging opportunities</span></div>
           </div>
         </section>
 

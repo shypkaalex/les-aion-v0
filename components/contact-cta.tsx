@@ -3,17 +3,52 @@
 import { MouseEvent, useId, useRef, useState } from "react";
 
 const email = "les@alexlogos.consulting";
-const subject = "Стратегічна розмова LES AION";
-const body =
-  "Вітаю, Лесе.\n\nХочу замовити стратегічну розмову щодо мого переходу.\n\nКоротко про мою ситуацію:\n\n";
+const copy = {
+  uk: {
+    subject: "Стратегічна розмова LES AION",
+    body: "Вітаю, Лесе.\n\nХочу замовити стратегічну розмову щодо мого переходу.\n\nКоротко про мою ситуацію:\n\n",
+    cta: "Замовити стратегічну розмову",
+    close: "Закрити",
+    eyebrow: "Стратегічна розмова",
+    title: "Оберіть зручний спосіб написати",
+    intro: "Ми вже підготували адресу, тему та початок листа.",
+    mailApp: "Поштова програма",
+    mailAppNote: "Outlook, Apple Mail або інша встановлена програма",
+    gmail: "Відкрити Gmail",
+    gmailNote: "Новий лист відкриється у браузері",
+    copy: "Скопіювати адресу",
+    copied: "Адресу скопійовано",
+  },
+  en: {
+    subject: "LES AION Strategic Conversation",
+    body: "Hello Les,\n\nI would like to request a strategic conversation about my transition.\n\nA brief outline of my situation:\n\n",
+    cta: "Request a strategic conversation",
+    close: "Close",
+    eyebrow: "Strategic conversation",
+    title: "Choose how you would like to write",
+    intro: "The address, subject line and opening text are already prepared.",
+    mailApp: "Email application",
+    mailAppNote: "Outlook, Apple Mail or another installed application",
+    gmail: "Open Gmail",
+    gmailNote: "A new message will open in your browser",
+    copy: "Copy email address",
+    copied: "Email address copied",
+  },
+} as const;
 
-const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-export default function ContactButton({ className = "" }: { className?: string }) {
+export default function ContactButton({
+  className = "",
+  locale = "uk",
+}: {
+  className?: string;
+  locale?: keyof typeof copy;
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [copied, setCopied] = useState(false);
+  const text = copy[locale];
+  const mailto = `mailto:${email}?subject=${encodeURIComponent(text.subject)}&body=${encodeURIComponent(text.body)}`;
+  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(text.subject)}&body=${encodeURIComponent(text.body)}`;
 
   function handleContactClick(event: MouseEvent<HTMLAnchorElement>) {
     const hasCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
@@ -53,7 +88,7 @@ export default function ContactButton({ className = "" }: { className?: string }
         className={`cta-button ${className}`.trim()}
         onClick={handleContactClick}
       >
-        Замовити стратегічну розмову
+        {text.cta}
         <span aria-hidden="true">↗</span>
       </a>
 
@@ -69,20 +104,20 @@ export default function ContactButton({ className = "" }: { className?: string }
           type="button"
           className="contact-dialog-close"
           onClick={closeDialog}
-          aria-label="Закрити"
+          aria-label={text.close}
         >
           ×
         </button>
-        <p className="eyebrow">Стратегічна розмова</p>
-        <h2 id={titleId}>Оберіть зручний спосіб написати</h2>
+        <p className="eyebrow">{text.eyebrow}</p>
+        <h2 id={titleId}>{text.title}</h2>
         <p className="contact-dialog-intro">
-          Ми вже підготували адресу, тему та початок листа.
+          {text.intro}
         </p>
 
         <div className="contact-dialog-actions">
           <a href={mailto} className="contact-option">
-            <span>Поштова програма</span>
-            <small>Outlook, Apple Mail або інша встановлена програма</small>
+            <span>{text.mailApp}</span>
+            <small>{text.mailAppNote}</small>
           </a>
           <a
             href={gmail}
@@ -90,11 +125,11 @@ export default function ContactButton({ className = "" }: { className?: string }
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span>Відкрити Gmail</span>
-            <small>Новий лист відкриється у браузері</small>
+            <span>{text.gmail}</span>
+            <small>{text.gmailNote}</small>
           </a>
           <button type="button" className="contact-option" onClick={copyEmail}>
-            <span>{copied ? "Адресу скопійовано" : "Скопіювати адресу"}</span>
+            <span>{copied ? text.copied : text.copy}</span>
             <small>{email}</small>
           </button>
         </div>

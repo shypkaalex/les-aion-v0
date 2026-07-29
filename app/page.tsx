@@ -84,6 +84,10 @@ export default function Home() {
           <Link href="#problem">Adaptation Gap</Link>
           <Link href="#transition">Перехід</Link>
           <Link href="#operator">Оператор</Link>
+          <div className="language-switch" aria-label="Вибір мови">
+            <span aria-current="page">UA</span>
+            <Link href="/en" lang="en">EN</Link>
+          </div>
           <ContactButton className="header-cta" />
         </nav>
       </header>

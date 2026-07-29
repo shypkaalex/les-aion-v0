@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Конфіденційність — LES AION",
+  alternates: { canonical: "/privacy", languages: { uk: "/privacy", en: "/en/privacy" } },
+};
 
 export default function PrivacyPage() {
   return (

@@ -44,6 +44,10 @@ p { line-height:1.7; }
 .cta-button:hover { background:var(--gold-light); transform:translateY(-2px); }
 .cta-button:focus-visible,a:focus-visible,summary:focus-visible { outline:2px solid var(--gold-light); outline-offset:4px; }
 .header-cta { min-height:42px; padding:0 17px; }
+.language-switch { display:flex; gap:7px; align-items:center; padding:0 4px; color:var(--quiet); font-size:10px; font-weight:700; letter-spacing:.12em; }
+.language-switch:before { width:1px; height:16px; margin-right:7px; background:var(--line); content:""; }
+.language-switch span { color:var(--gold-light); }
+.language-switch a:hover { color:var(--text); }
 .contact-dialog { width:min(600px,calc(100vw - 32px)); margin:auto; padding:46px; border:1px solid rgba(212,175,90,.3); border-radius:2px; color:var(--text); background:#0b1625; box-shadow:0 30px 100px rgba(0,0,0,.65); }
 .contact-dialog::backdrop { background:rgba(3,9,17,.82); backdrop-filter:blur(8px); }
 .contact-dialog-close { position:absolute; top:16px; right:18px; width:38px; height:38px; border:0; color:var(--muted); background:transparent; font:300 28px/1 Georgia,serif; cursor:pointer; }

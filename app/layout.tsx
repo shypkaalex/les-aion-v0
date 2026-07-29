@@ -19,7 +19,10 @@ export const metadata: Metadata = {
     title: "LES AION — оператор переходів",
     description: "Працюємо з Adaptation Gap і вартістю часу.",
   },
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    languages: { uk: "/", en: "/en" },
+  },
   robots: { index: true, follow: true },
 };
 

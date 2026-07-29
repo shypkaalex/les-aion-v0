@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Умови користування — LES AION",
+  alternates: { canonical: "/terms", languages: { uk: "/terms", en: "/en/terms" } },
+};
 
 export default function TermsPage() {
   return (
